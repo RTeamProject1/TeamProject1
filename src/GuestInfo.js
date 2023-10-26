@@ -40,13 +40,20 @@ class Tree{
                 while (current) {
                     // 날짜 비교를 통해 형제 노드 또는 자식 노드로 추가
                     if (current.date < newNode.date) {
-                        parent = current;
-                        current = current.sibling;
+                        if (!current.children){
+                            current.children = newNode;
+                            break;
+                        }else {
+                            parent = current;
+                            current = current.children;
+                        }
                     } else if (current.date > newNode.date) {
-                        newNode.sibling = current;
+                        //newNode.sibling = current;
                         if (parent) {
-                            parent.sibling = newNode;
+                            newNode.children = parent.children;
+                            parent.children = newNode;
                         } else {
+                            newNode.children = this.head;
                             this.head = newNode;
                         }
                         break;
@@ -59,7 +66,7 @@ class Tree{
                 }
 
                 // 부모 노드의 자식으로 추가
-                if (parent) {
+                /*if (parent) {
                     if (!parent.children) {
                         parent.children = newNode;
                     } else {
@@ -69,7 +76,7 @@ class Tree{
                         }
                         child.sibling = newNode;
                     }
-                }
+                }*/
             }
 
             currentDate.setDate(currentDate.getDate() + 1); // 다음 날짜로 이동
