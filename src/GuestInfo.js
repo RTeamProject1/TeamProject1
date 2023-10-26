@@ -99,22 +99,19 @@ function GuestInfo() {
     };
 
    
-    
+
 
     // handleSubmit 함수는 완료 버튼을 클릭할 때 실행
     const handleSubmit = () => {
-        const userData = JSON.parse(localStorage.getItem('userData')) || { tree: new Tree() };
+        const userData = JSON.parse(localStorage.getItem('userData')) || {};
         //const tree = userData.tree;
         
+        if (!userData.tree) {
+            userData.tree = new Tree();
+        }
         userData.tree.addNodeInRange(name, email, phoneNumber, startDate, endDate);
-        // userData.name = name;
-        // userData.email = email;
-        // userData.phoneNumber = phoneNumber;
-        // userData.startDate = startDate;
-        // userData.endDate = endDate;
-
-
         
+
         localStorage.setItem('userData', JSON.stringify(userData));
         console.log(userData.tree);
         // 데이터를 저장한 후 필요에 따라 다른 작업 수행 가능
