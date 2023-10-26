@@ -1,0 +1,69 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    /* width: 300px; */
+    padding: 20px;
+    margin-top: 150px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    border-top: 300px;
+}
+
+.form-container label {
+    align-self: flex-start;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container input,
+.form-container .react-datepicker-wrapper,
+.form-container .react-datepicker__input-time-container {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.date-range {
+    display: flex;
+    justify-content: space-between;
+}
+
+.date-range .react-datepicker-wrapper {
+    width: 45%;
+}
+
+.button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.max-people {
+    text-align: left;
+}
+
+/* .form-container button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+} */
+
+.test {
+    text-align: left;
+}
+
+/* 화면 정중앙에 위치시키기 위한 코드 */
+/* body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+	브라우저 높이를 전체 차지하도록 설정
+} */

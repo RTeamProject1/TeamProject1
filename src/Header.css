@@ -1,0 +1,31 @@
+/* .navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.logo {
+    font-size: 1.5em;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+}
+
+.nav-link {
+    margin-left: 15px;
+    text-decoration: none;
+} */
+
+/* 로고와 링크에 마우스를 올렸을 때 색상 변경 */
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.menu-bar a:hover {
+    background-color: #ddd;
+}

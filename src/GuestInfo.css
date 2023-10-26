@@ -1,0 +1,15 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+
+.input-box {
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+.button {
+}

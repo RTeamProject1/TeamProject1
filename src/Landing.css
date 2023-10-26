@@ -1,0 +1,15 @@
+/* .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh; 
+	
+} */
+
+.container-box {
+    margin-top: 350px;
+}
+
+.container-box.button {
+    width: 100px;
+}
