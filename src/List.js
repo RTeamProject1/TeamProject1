@@ -1,4 +1,4 @@
-import React, { useState/*, useEffect*/ } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from './Header';
@@ -18,8 +18,8 @@ import './List.css';
 function CalendarPage() {
     const [date, setDate] = useState(new Date()); // 현재 선택된 날짜를 관리하는 변수
     const [participants, setParticipants] = useState([]); // 선택된 날짜에 참여할 수 있는 사용자의 이름 목록을 저장하는 변수
-/*
-    useEffect(() => {
+
+    /*useEffect(() => {
         // 로컬 스토리지에서 가져온 데이터를 JavaScript 객체로 변환한 후 userData 배열에 저장
         const userData = JSON.parse(localStorage.getItem('userData'));
         console.log('Data from localStorage in CalendarPage:', userData);
@@ -41,8 +41,8 @@ function CalendarPage() {
         const participantNames = filteredParticipants.map((participant) => participant.name);
         console.log(participantNames)
         setParticipants(participantNames);
-    }, [date]);
-*/
+    }, [date]);*/
+
     return (
         <>
             <Header />
