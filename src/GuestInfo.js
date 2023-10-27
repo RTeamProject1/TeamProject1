@@ -23,67 +23,53 @@ class Tree{
     constructor(){
         this.head = null;
     }
+}
+function addNodeInRange(tree, name, email, phoneNumber, startDate, endDate) {
+    const currentDate = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    currentDate.setDate(currentDate.getDate() + 1);
+    endDateObj.setDate(endDateObj.getDate() + 1);
 
-    addNodeInRange(name, email, phoneNumber, startDate, endDate) {
-        const currentDate = new Date(startDate);
-        const endDateObj = new Date(endDate);
+    while (currentDate <= endDateObj) {
+        const newNode = new TreeNode(name, email, phoneNumber, new Date(currentDate).toJSON());
+        if (!tree.head) {
+            tree.head = newNode;
+        } else {
+            let current = tree.head;
+            let parent = null;
 
-        while (currentDate <= endDateObj) {
-            const newNode = new TreeNode(name, email, phoneNumber, new Date(currentDate));
-
-            if (!this.head) {
-                this.head = newNode;
-            } else {
-                let current = this.head;
-                let parent = null;
-
-                while (current) {
-                    // 날짜 비교를 통해 형제 노드 또는 자식 노드로 추가
-                    if (current.date < newNode.date) {
-                        if (!current.children){
-                            current.children = newNode;
-                            break;
-                        }else {
-                            parent = current;
-                            current = current.children;
-                        }
-                    } else if (current.date > newNode.date) {
-                        //newNode.sibling = current;
-                        if (parent) {
-                            newNode.children = parent.children;
-                            parent.children = newNode;
-                        } else {
-                            newNode.children = this.head;
-                            this.head = newNode;
-                        }
+            while (current) {
+                // 날짜 비교를 통해 형제 노드 또는 자식 노드로 추가
+                if (current.date < newNode.date) {
+                    if (!current.children){
+                        current.children = newNode;
                         break;
-                    } else {
-                        // 날짜가 같은 경우, 형제 노드로 추가
-                        newNode.sibling = current.sibling;
-                        current.sibling = newNode;
-                        break;
+                    }else {
+                        parent = current;
+                        current = current.children;
                     }
-                }
-
-                // 부모 노드의 자식으로 추가
-                /*if (parent) {
-                    if (!parent.children) {
+                } else if (current.date > newNode.date) {
+                    //newNode.sibling = current;
+                    if (parent) {
+                        newNode.children = parent.children;
                         parent.children = newNode;
                     } else {
-                        let child = parent.children;
-                        while (child.sibling) {
-                            child = child.sibling;
-                        }
-                        child.sibling = newNode;
+                        newNode.children = tree.head;
+                        tree.head = newNode;
                     }
-                }*/
+                    break;
+                } else {
+                    // 날짜가 같은 경우, 형제 노드로 추가
+                    newNode.sibling = current.sibling;
+                    current.sibling = newNode;
+                    break;
+                }
             }
-
-            currentDate.setDate(currentDate.getDate() + 1); // 다음 날짜로 이동
         }
+
+        currentDate.setDate(currentDate.getDate() + 1); // 다음 날짜로 이동
     }
 }
-
 
 function GuestInfo() {
     const [name, setName] = useState('');
@@ -114,14 +100,16 @@ function GuestInfo() {
         //const tree = userData.tree;
         
         if (!userData.tree) {
+            console.log("dktlqkf");
             userData.tree = new Tree();
         }
-        userData.tree.addNodeInRange(name, email, phoneNumber, startDate, endDate);
+        
+        addNodeInRange(userData.tree, name, email, phoneNumber, startDate, endDate);
         
 
         localStorage.setItem('userData', JSON.stringify(userData));
         console.log(userData.tree);
-        // 데이터를 저장한 후 필요에 따라 다른 작업 수행 가능
+        // 데이터를 저장한 후 필요에 따라 다른 작업 수행 가능]
         //localStorage.clear();
         setName('');
         setEmail('');
