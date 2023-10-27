@@ -30,6 +30,11 @@ function addNodeInRange(tree, name, email, phoneNumber, startDate, endDate) {
     currentDate.setDate(currentDate.getDate() + 1);
     endDateObj.setDate(endDateObj.getDate() + 1);
 
+    if (!tree.head) {
+        tree.head = new TreeNode(name, email, phoneNumber, new Date(currentDate).toJSON());
+        //tree.head = new TreeNode( null, null, null , new Date("1970-01-01T00:00:00.000Z").toJSON());
+        return;
+    }
     while (currentDate <= endDateObj) {
         const newNode = new TreeNode(name, email, phoneNumber, new Date(currentDate).toJSON());
         if (!tree.head) {
