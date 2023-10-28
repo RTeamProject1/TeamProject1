@@ -118,7 +118,7 @@ function CalendarPage() {
         const userData = JSON.parse(localStorage.getItem('userData')) || [];
 
         const selectedDate = new Date(date); // 선택한 날짜를 복사
-        selectedDate.setDate(selectedDate.getDate() + 1); // 하루 뒤 날짜로 변경
+        selectedDate.setDate(selectedDate.getDate()+1); // 하루 뒤 날짜로 변경
         // const selectedDateISO = selectedDate.toISOString().split('T')[0];
         // const selectedDateISO = selectedDate.toJSON().split('T')[0];
 
