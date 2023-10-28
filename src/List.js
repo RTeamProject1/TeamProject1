@@ -49,7 +49,7 @@ function findVotersForDate(tree, targetDate) {
 
     return voters;
 }
-/*
+
 //insertion sort를 위한 함수 두개
 function countSibling(node) {
     let a = 0;
@@ -71,26 +71,27 @@ class TreeNode {
         this.sibling = null; 
     }
 }
+
 function insertionSortLCRSTree(root) {
     if (!root) {
         return null;
     }
 
     const sortedRoot = new TreeNode(0); // 더미 노드
-    let unsortedRoot = root.children;
-
+    let unsortedRoot = root;
+    
     while (unsortedRoot) {
         const current = unsortedRoot;
         unsortedRoot = unsortedRoot.children;
-
+        
         let prev = null;
-        let sorted = sortedRoot;
+        let sorted = sortedRoot.children;
 
-        while (sorted &&  countSibling(current)< countSibling(sorted)) {
+        while (sorted && (countSibling(current) < countSibling(sorted))) {
             prev = sorted;
             sorted = sorted.children;
         }
-
+        
         if (!prev) {
             // 현재 노드를 정렬된 트리의 가장 앞에 삽입합니다.
             current.children = sortedRoot.children;
@@ -102,9 +103,11 @@ function insertionSortLCRSTree(root) {
         }
     }
 
-    return sortedRoot;
+    return sortedRoot.children;
 }
-*/ //주석 처리 된 부분은 insertion sort관련 코드
+
+
+ //주석 처리 된 부분은 insertion sort관련 코드
 function CalendarPage() {
     const [date, setDate] = useState(new Date());
     const [participants, setParticipants] = useState([]);
@@ -132,16 +135,21 @@ function CalendarPage() {
         console.log("Selected Date:", selectedDate);
         console.log("Voters: ",voters );
     }, [date]);
-/*
+
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('userData')) || [];
 
         const sortedRoot = insertionSortLCRSTree(userData.tree.head);
 
-        console.log("sorted tree:", sortedRoot);
-        //localStorage.clear();
-    })
-*/
+        let currentNode = sortedRoot;
+        while (currentNode) {
+            possibleDates.push(currentNode.date);
+            currentNode = currentNode.children;
+        }
+
+        setPossibleDates(possibleDates);
+    }, []);
+
     return (
         <div>
             <Header />
@@ -156,11 +164,11 @@ function CalendarPage() {
 
                 <div className="List-container">
                     <h1>가능한 날짜 순위</h1>
-                    <ol>
+                    
                         {possibleDates.slice(0, 3).map((date, dateIndex) => (
                             <li key={dateIndex}>{dateIndex + 1}. {date}</li>
                         ))}
-                    </ol>
+                    
                 </div>
 
                 <div className="participants-container">
