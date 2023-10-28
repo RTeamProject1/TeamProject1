@@ -87,7 +87,7 @@ function insertionSortLCRSTree(root) {
         let prev = null;
         let sorted = sortedRoot.children;
 
-        while (sorted && (countSibling(current) < countSibling(sorted))) {
+        while (sorted && (countSibling(current) <= countSibling(sorted))) {
             prev = sorted;
             sorted = sorted.children;
         }
