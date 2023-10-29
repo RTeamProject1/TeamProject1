@@ -18,7 +18,7 @@ function CreateRoom2() {
     const handleStartDateChange = (date) => {
         setStartDate(date);
     };
-    
+
     const handleEndDateChange = (date) => {
         setEndDate(date);
     };
@@ -26,11 +26,11 @@ function CreateRoom2() {
     const handleRoomNameChange = (e) => {
         setRoomName(e.target.value);
     };
-    
+
     const handleMaxPeopleChange = (e) => {
         setMaxPeople(e.target.value);
     };
-    
+
     const handleDeadlineTimeChange = (date) => {
         setDeadlineTime(date);
     };
@@ -41,28 +41,24 @@ function CreateRoom2() {
             startDate: startDate,
             endDate: endDate,
             maxPeople: maxPeople,
-            deadlineTime: deadlineTime
+            deadlineTime: deadlineTime,
         };
 
         // Convert the object to a JSON string and store it in localStorage
         localStorage.setItem('room', JSON.stringify(roomInfo));
-        console.log(`방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`);
+        console.log(
+            `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`
+        );
     };
-
 
     return (
         <div>
             <Header />
 
-            <div className="container">
+            <div className="content container">
                 <div className="form-container">
                     <label>방이름을 정해주세요</label>
-                    <input
-                        type="text"
-                        placeholder="방 이름"
-                        value={roomName}
-                        onChange={handleRoomNameChange}
-                    />
+                    <input type="text" placeholder="방 이름" value={roomName} onChange={handleRoomNameChange} />
                     <label>대략적인 기간을 입력해주세요</label>
                     <div className="date-range">
                         <DatePicker
@@ -85,7 +81,6 @@ function CreateRoom2() {
                     </div>
                     <label>모임의 최대인원을 입력해주세요</label>
                     <select value={maxPeople} onChange={handleMaxPeopleChange} className="max-people">
-                        
                         <option value="">선택하세요</option>
                         {Array.from({ length: 100 }, (_, i) => i + 1).map((num) => (
                             <option key={num} value={num}>
@@ -106,7 +101,9 @@ function CreateRoom2() {
                     />
                     <div className="button-wrapper">
                         <Link to="/CalanderPage">
-                            <button className="btn btn-success submit-btn" onClick={saveRoom}>완료</button>
+                            <button className="btn btn-success submit-btn" onClick={saveRoom}>
+                                완료
+                            </button>
                         </Link>
                     </div>
                 </div>

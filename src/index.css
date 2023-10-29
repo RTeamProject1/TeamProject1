@@ -9,3 +9,9 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+@font-face {
+    font-family: 'GowunDodum-Regular';
+    font-weight: normal;
+    src: url('./font/NPSfont_regular.ttf') format('truetype');
+}

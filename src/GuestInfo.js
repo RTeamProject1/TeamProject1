@@ -143,18 +143,23 @@ function GuestInfo() {
                         value={phoneNumber}
                         onChange={handlePhoneNumberChange}
                     />
-                    <label>참여 가능한 날짜를 선택해주세요</label>
-                    {dates.map((date, index) => (
-                        <div key={index} className="date-range">
-                            <DatePicker
-                                placeholderText="날짜 선택"
-                                selected={date}
-                                onChange={(date) => handleDateChange(date, index)}
-                                dateFormat="yyyy-MM-dd"
-                            />
-                        </div>
-                    ))}
-                    <button onClick={addDate}>+</button>
+                    <label className="date-label">참여 가능한 날짜를 선택해주세요</label>
+                    <div className="date-range-container">
+                        {dates.map((date, index) => (
+                            <div key={index} className="date-range">
+                                <DatePicker
+                                    placeholderText="날짜 선택"
+                                    selected={date}
+                                    onChange={(date) => handleDateChange(date, index)}
+                                    dateFormat="yyyy-MM-dd"
+                                    className="date-picker"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <button className="add-date-button" onClick={addDate}>
+                        +
+                    </button>
                     <Link to="/List">
                         <button className="btn btn-success submit-btn" onClick={handleSubmit}>
                             완료

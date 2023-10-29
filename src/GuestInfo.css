@@ -1,15 +1,52 @@
-.content {
+/* .date-range-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 70vh;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.date-range {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.add-date-button {
+    margin-top: 10px;
+} */
+
+.input-box-container {
+    width: 300px;
+    margin: 0 auto;
 }
 
 .input-box {
-    margin-bottom: 20px;
-    width: 300px;
+    margin-bottom: 10px;
 }
 
-.button {
+.date-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.date-range-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.date-range {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.date-picker {
+    width: 260px;
+}
+
+.add-date-button {
+    margin-top: -50px;
+    float: right;
+}
+
+.submit-btn {
+    margin-top: 20px;
 }

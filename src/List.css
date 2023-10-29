@@ -9,14 +9,14 @@
     align-items: left;
 }
 
-.List-list-container{
+.List-list-container {
     flex: 4;
     justify-content: center;
     align-items: center;
 }
 
 .List-list {
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .participant-list-container {
