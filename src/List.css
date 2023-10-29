@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+
 .calendar-page-container {
     margin: 100px;
     display: flex;
+    align-items: center;
 }
 
 .calendar-container {
@@ -9,24 +12,7 @@
     align-items: left;
 }
 
-.List-list-container {
-    flex: 4;
-    justify-content: center;
-    align-items: center;
-}
 
-.List-list {
-    margin-top: 50px;
-}
-
-.participant-list-container {
-    flex: 3; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
-    margin-top: 20px;
-    border: 1px solid #ddd; /* 경계선 추가 */
-    padding: 20px; /* 내부 여백 추가 */
-    justify-content: right;
-    align-items: right;
-}
 
 .participant-list {
     margin-top: 20px;
@@ -48,14 +34,30 @@
     margin-right: 20px;
 }
 
+
 .participants-container {
-    border: 1px solid #000;
+    margin-left : 50px;
+    border : 3px solid;
+    border-color : #198754;
     padding: 10px;
     width: 200px;
+    background-color: white;
+    
 }
 
 .List-container {
-    border: 1px solid #000;
+    margin-right : 50px;
+    border : 3px solid;
+    border-color : #198754;
     padding: 10px;
     width: 200px;
+    background-color: white;
+    text-align: left;
+}
+
+.container h1,h2{
+    text-align: center;
+    font-family : 'Gamja Flower', sans-serif;
+    font-weight : bold;
+    color : #198754;
 }

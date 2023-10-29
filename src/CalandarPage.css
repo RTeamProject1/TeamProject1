@@ -31,11 +31,20 @@
 }
 
 .calendar-container {
+    border : none;
     margin-right: 20px;
+    padding: 10px;
+    width: 200px;
+    margin-top: 20px;
+    border-radius: 30px;
 }
 
 .participants-container {
-    border: 1px solid #000;
+    border : 3px solid;
+    border-color : #198754;
     padding: 10px;
     width: 200px;
+    flex: 3; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
+    margin-top: 20px;
+    
 }

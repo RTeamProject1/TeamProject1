@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+
 .bottom {
     position: fixed; /* 고정 위치 */
     bottom: 0; /* 페이지 바닥에서 0px */
     width: 100%; /* 푸터의 너비를 전체 페이지로 설정 */
     height: 50px;
-    background-color: #f8f9fa;
+    background-color: #198754;
+    font-family : 'Gamja Flower', sans-serif;
+    font-size : 20px
+    
 }
 
 footer {
@@ -11,9 +16,11 @@ footer {
     justify-content: center; /* 아이템들을 가로선 상의 중앙으로 배치 */
     align-items: center; /* 아이템들을 세로선 상의 중앙으로 배치 */
     text-align: center;
+   
 }
 
 footer div {
     margin-right: 20px; /*div 사이에 간격 추가*/
     cursor: pointer;
+    color : white;
 }
