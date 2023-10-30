@@ -142,7 +142,8 @@ function List() {
 
         let currentNode = sortedRoot;
         while (currentNode) {
-            possibleDates.push(currentNode.date);
+            const date = currentNode.date.split('T')[0];
+            possibleDates.push(date);
             currentNode = currentNode.children;
         }
 
