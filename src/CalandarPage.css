@@ -19,6 +19,21 @@
 }
 
 /* App.css */
+.react-calendar {
+    border-radius: 10px;
+}
+
+.react-calendar__tile--active {
+    background: #7fb77e;
+    color: white;
+    border-radius: 10px;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #7fb77e;
+    border-radius: 10px;
+}
 
 .container {
     display: flex;

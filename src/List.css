@@ -12,7 +12,21 @@
     align-items: left;
 }
 
+.react-calendar {
+    border-radius: 10px;
+}
 
+.react-calendar__tile--active {
+    background: #7fb77e;
+    color: white;
+    border-radius: 10px;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #7fb77e;
+    border-radius: 10px;
+}
 
 .participant-list {
     margin-top: 20px;
@@ -42,7 +56,7 @@
     padding: 10px;
     width: 200px;
     background-color: white;
-    
+    margin-top: 11px;
 }
 
 .List-container {
@@ -53,6 +67,7 @@
     width: 200px;
     background-color: white;
     text-align: left;
+    margin-top: 140px;
 }
 
 .container h1,h2{

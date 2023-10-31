@@ -5,6 +5,7 @@ import Header from './Header';
 import Footer from './Footer';
 import 'react-calendar/dist/Calendar.css';
 import './List.css';
+import moment from "moment";
 
 // 코드 흐름
 // 1.캘린더에 날짜가 선택되면
@@ -155,7 +156,9 @@ function List() {
             <Header />
             <div className="container">
                 <div className="calendar-container">
-                    <Calendar className="calendar" onChange={setDate} value={date} />
+                    <Calendar className="calendar" onChange={setDate} value={date} 
+                    formatDay={(locale, date) => moment(date).format("DD")}
+                    calendarType={"US"} />
                 </div>
 
                 <div className="List-container">

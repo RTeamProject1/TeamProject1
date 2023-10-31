@@ -6,6 +6,7 @@ import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import './CalandarPage.css';
+import moment from "moment";
 
 function CalendarPage() {
     const [date, setDate] = useState(new Date());
@@ -21,7 +22,9 @@ function CalendarPage() {
             <Header />
             <div className="container">
                 <div className="calendar-container">
-                    <Calendar className="calender" onChange={setDate} value={date} />
+                    <Calendar className="calendar" onChange={setDate} value={date} 
+                    formatDay={(locale, date) => moment(date).format("DD")}
+                    calendarType={"US"} />  \
                 </div>
                 <div className="participants-container">
                     <Link to="/GuestInfo">
