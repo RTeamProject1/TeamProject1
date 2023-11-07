@@ -24,7 +24,7 @@ function CalendarPage() {
                 <div className="calendar-container">
                     <Calendar className="calendar" onChange={setDate} value={date} 
                     formatDay={(locale, date) => moment(date).format("DD")}
-                    calendarType={"US"} />  \
+                    calendarType={"US"} />  
                 </div>
                 <div className="participants-container">
                     <Link to="/GuestInfo">

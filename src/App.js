@@ -6,6 +6,7 @@ import CreateRoom2 from './CreateRoom2';
 import CalendarPage from './CalendarPage';
 import GuestInfo from './GuestInfo';
 import List from './List';
+import { db } from "./firebase";
 
 function App() {
     return (

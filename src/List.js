@@ -6,6 +6,8 @@ import Footer from './Footer';
 import 'react-calendar/dist/Calendar.css';
 import './List.css';
 import moment from "moment";
+import { db } from "./firebase";
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 // 코드 흐름
 // 1.캘린더에 날짜가 선택되면
@@ -115,30 +117,30 @@ function List() {
     const [possibleDates, setPossibleDates] = useState([]);
 
     useEffect(() => {
-        // 로컬 스토리지에서 가져온 데이터를 JavaScript 객체로 변환한 후 userData 배열에 저장
-        const userData = JSON.parse(localStorage.getItem('userData')) || [];
+        const fetchData = async () => {
+            const q = query(collection(db, "User"), where("dates", "array-contains", date));
+            const querySnapshot = await getDocs(q);
+            const voters = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                voters.push({
+                    name: data.name,
+                    email: data.email,
+                    phoneNumber: data.phoneNumber,
+                });
+            });
+            console.log("Fetched Data:", voters);
+            // 이 부분에서 voters 배열을 filteredParticipants 배열로 설정
+            setParticipants(voters.map(voter => voter.name));
+        };
 
-        const selectedDate = new Date(date); // 선택한 날짜를 복사
-        selectedDate.setDate(selectedDate.getDate() + 1); // 하루 뒤 날짜로 변경
-        // const selectedDateISO = selectedDate.toISOString().split('T')[0];
-        // const selectedDateISO = selectedDate.toJSON().split('T')[0];
-
-        const selectedDateJSON = selectedDate.toJSON();
-        // 날짜에 해당하는 사용자 정보를 찾고 투표자 목록 추출
-        const voters = findVotersForDate(userData.tree, selectedDateJSON);
-
-        // 추출한 투표자 목록을 이름으로 변환
-        const votedParticipants = voters.map((voter) => voter.name);
-
-        setParticipants(votedParticipants);
-
-        console.log('Selected Date:', selectedDate);
-        console.log('Voters: ', voters);
+        fetchData();
     }, [date]);
+
 
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('userData')) || [];
-
+        console.log(db);
         const sortedRoot = insertionSortLCRSTree(userData.tree.head);
 
         let currentNode = sortedRoot;
