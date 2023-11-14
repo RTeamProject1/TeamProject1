@@ -1,0 +1,103 @@
+.box1 {
+    width: 700px;
+    height: 500px;
+    background-color: rgb(204, 255, 204);
+    text-align: center;
+    position: relative;
+    margin: auto;
+    margin-top: 150px;
+    border-radius: 20px;
+}
+
+.login_h1 {
+    font-size: 50px;
+    position: relative;
+    top: 30px;
+}
+hr {
+    width: 50%;
+}
+
+.input_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+.input_box input {
+    width: 200px;
+    height: 30px;
+    outline: none;
+}
+input::placeholder {
+    color: black;
+    width: 100px;
+    height: 100px;
+    font-size: 15px;
+}
+.id {
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-color: black;
+    border-width: 1px;
+    color: red;
+}
+.id {
+    color: black;
+}
+.password {
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-color: black;
+    border-width: 1px;
+}
+.name {
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-color: aliceblue;
+    border-width: 1px;
+}
+.phone {
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-color: aliceblue;
+    border-width: 1px;
+}
+.login_btn {
+    width: 160px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: #2222;
+    color: black;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+.join_btn {
+    width: 160px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: #2222;
+    color: aliceblue;
+    font-size: 18px;
+}
+.a_box a {
+    text-decoration: none;
+    color: inherit;
+}
+.a_box_1 {
+    margin-right: 30px;
+}
+.a_box_2 {
+    margin-left: 30px;
+}
