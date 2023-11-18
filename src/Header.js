@@ -17,11 +17,14 @@ function Header() {
                     <FontAwesomeIcon icon={faCalendar} /> <span>Mannam2</span>
                 </Link>
                 <div className="menu-bar">
-                    <Link to="/signup" className="btn btn-outline-secondary me-2">
-                        회원가입
-                    </Link>
                     <Link to="/login" className="btn btn-outline-secondary me-2">
                         로그인
+                    </Link>
+                    <Link to="/landing" className="btn btn-outline-secondary me-2">
+                        로그아웃
+                    </Link>
+                    <Link to="/#" className="btn btn-outline-secondary me-2">
+                        내정보
                     </Link>
                     <Link to="/terms" className="btn btn-outline-secondary me-2">
                         이용약관
