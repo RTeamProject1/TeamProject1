@@ -4,19 +4,16 @@ import { Link } from 'react-router-dom';
 
 function Login() {
     return (
-        <div className="wrapper">
-            <div className="login-container">
-                <h1>간편 로그인</h1>
-                <div className="button-container">
-                    <Link to="#" className="btn btn-outline-secondary me-2">
-                        애플로 로그인
-                    </Link>
-
-                    <Link to="#" className="btn btn-outline-secondary me-2">
-                        구글로 로그인
-                    </Link>
-                </div>
-            </div>
+        <div class="login-box">
+            <h2>소셜로그인으로 간편하게 로그인</h2>
+            <a href="#" class="social-button" id="apple-connect">
+                {' '}
+                <span>Log in with Apple</span>
+            </a>
+            <a href="#" class="social-button" id="google-connect">
+                {' '}
+                <span>Log in with Google</span>
+            </a>
         </div>
     );
 }
