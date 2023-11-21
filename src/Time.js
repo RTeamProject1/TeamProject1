@@ -8,28 +8,28 @@ import { useState } from 'react'
 function Time() {
     const [startTime, setStartTime] = useState(null);
     const [deadlineTime, setDeadlineTime] = useState(null);
-    const [times, setTimes] = useState([null]);
-
+    const [times, setTimes] = useState([{ startTime: null, deadlineTime: null }]);
 
     // '+' 버튼 클릭 시 추가적인  범위 입력 상자 생성
     const addTime = () => {
-        setTimes([...times, null]);
+        setTimes([...times, { startTime: null, deadlineTime: null }]);
     };
     const handleShare = () => {
         alert('저장되었습니다!');
         window.close();
     };
+
     const handleStartTimeChange = (date, index) => {
         const updatedTimes = [...times];
-        updatedTimes[index] = date;
+        updatedTimes[index] = { ...updatedTimes[index], startTime: date };
         setStartTime(date);
         setTimes(updatedTimes);
       };
     
       const handleDeadlineTimeChange = (date, index) => {
         const updatedTimes = [...times];
-        updatedTimes[index] = date;
         setDeadlineTime(date);
+        updatedTimes[index] = { ...updatedTimes[index], deadlineTime: date };
         setTimes(updatedTimes);
       };
     const saveRoom = () => {
@@ -58,7 +58,7 @@ function Time() {
                         {times.map((time, index) => (
                             <div key={index} className="time-range">
                                 <DatePicker
-                                    selected={time}
+                                    selected={time.startTime}
                                     onChange={(date) => handleStartTimeChange(date, index)}
                                     showTimeSelect
                                     showTimeSelectOnly
@@ -69,7 +69,7 @@ function Time() {
                                     className="time-picker"
                                 />
                                 <DatePicker
-                                    selected={time}
+                                    selected={time.deadlineTime}
                                     onChange={(date) => handleDeadlineTimeChange(date, index)}
                                     showTimeSelect
                                     showTimeSelectOnly
