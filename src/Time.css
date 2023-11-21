@@ -1,0 +1,17 @@
+
+.time-range{
+    display: flex;
+    justify-content: space-between;
+    width:91%;
+}
+
+.add-time-button{
+    margin-top: -50px;
+    width : 30px;
+    height : 30px;
+    float:right;
+}
+
+.time-picker {
+    width: 260px;
+}
