@@ -4,7 +4,9 @@
 }
 
 .calendar-container {
-    flex: 7; /* 달력 영역이 전체 너비의 70%를 차지 */
+    
+    width : 350px;
+    max-width:100%;
 }
 
 .participant-list-container {
