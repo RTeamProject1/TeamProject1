@@ -4,9 +4,7 @@
 }
 
 .calendar-container {
-    
-    width : 350px;
-    max-width:100%;
+    flex : 7;
 }
 
 .participant-list-container {
@@ -22,6 +20,8 @@
 
 /* App.css */
 .react-calendar {
+    width : 100%;
+    height : 100%;
     border-radius: 10px;
 }
 

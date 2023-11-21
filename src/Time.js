@@ -1,51 +1,71 @@
 import DatePicker from 'react-datepicker';
-//import InputMask from 'react-input-mask';
-
+import React, { useState } from 'react';
+import './GuestInfo.css';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Time.css';
-import { useState } from 'react'
+import { db } from "./firebase";
 
 function Time() {
     const [startTime, setStartTime] = useState(null);
     const [deadlineTime, setDeadlineTime] = useState(null);
-    const [times, setTimes] = useState([null]);
-
+    const [times, setTimes] = useState([{ startTime: null, deadlineTime: null }]);
 
     // '+' 버튼 클릭 시 추가적인  범위 입력 상자 생성
     const addTime = () => {
-        setTimes([...times, null]);
+        setTimes([...times, { startTime: null, deadlineTime: null }]);
     };
     const handleShare = () => {
         alert('저장되었습니다!');
         window.close();
     };
+
     const handleStartTimeChange = (date, index) => {
         const updatedTimes = [...times];
-        updatedTimes[index] = date;
+        updatedTimes[index] = { ...updatedTimes[index], startTime: date };
         setStartTime(date);
         setTimes(updatedTimes);
       };
     
-      const handleDeadlineTimeChange = (date, index) => {
+    const handleDeadlineTimeChange = (date, index) => {
         const updatedTimes = [...times];
-        updatedTimes[index] = date;
         setDeadlineTime(date);
+        updatedTimes[index] = { ...updatedTimes[index], deadlineTime: date };
         setTimes(updatedTimes);
       };
-    const saveRoom = () => {
-        const roomInfo = {
-            startTime: startTime,
-            deadlineTime: deadlineTime,
-        };
 
-        // Convert the object to a JSON string and store it in localStorage
-        localStorage.setItem('room', JSON.stringify(roomInfo));
-        console.log(
-            `방 정보: 시작 시간 - ${startTime}, 종료 시간 - ${deadlineTime}`
-        );
-    };
-    const handleButtonClick = () => {
-        saveRoom(); // saveRoom 함수 실행
+      const generateHoursArray = (start, end) => {
+        const hours = [];
+        let currentTime = new Date(start);
+        const adjustedEndTime = new Date(end.getTime() + 60 * 1000);
+        while (currentTime <= adjustedEndTime) {
+          hours.push(currentTime.getHours());
+          currentTime = new Date(currentTime.getTime() + 60 * 60 * 1000); // 1시간 추가
+        }
+      
+        return hours;
+      };
+    
+    const handleButtonClick = async() => {
+        let timeArray = [];
+        for (const time of times){
+            console.log(time.startTime, time.deadlineTime);
+            timeArray = timeArray.concat(generateHoursArray(time.startTime, time.deadlineTime));
+        }
+        console.log("시간 합친 거: ", timeArray);
+         let currentdate = new Date();
+        const storedDate = JSON.parse(localStorage.getItem("currentdate"));
+        currentdate = new Date(storedDate);
+        currentdate.setDate(currentdate.getDate());
+        
+        const firestoreUserData = {
+            id : null,
+            password : null,
+            date : currentdate,
+            times : timeArray
+        };
+        console.log(firestoreUserData);
+        await addDoc(collection(db, "User"), firestoreUserData);
         handleShare(); // handleShare 함수 실행
       };
 
@@ -58,7 +78,7 @@ function Time() {
                         {times.map((time, index) => (
                             <div key={index} className="time-range">
                                 <DatePicker
-                                    selected={time}
+                                    selected={time.startTime}
                                     onChange={(date) => handleStartTimeChange(date, index)}
                                     showTimeSelect
                                     showTimeSelectOnly
@@ -69,7 +89,7 @@ function Time() {
                                     className="time-picker"
                                 />
                                 <DatePicker
-                                    selected={time}
+                                    selected={time.deadlineTime}
                                     onChange={(date) => handleDeadlineTimeChange(date, index)}
                                     showTimeSelect
                                     showTimeSelectOnly

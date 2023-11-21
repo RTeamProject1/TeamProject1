@@ -116,7 +116,7 @@ function List() {
     const [participants, setParticipants] = useState([]);
     const [possibleDates, setPossibleDates] = useState([]);
 
-    useEffect(() => {
+   /* useEffect(() => {
         const fetchData = async () => {
             const q = query(collection(db, "User"), where("dates", "array-contains", date));
             const querySnapshot = await getDocs(q);
@@ -151,7 +151,7 @@ function List() {
         }
 
         setPossibleDates(possibleDates);
-    }, []);
+    }, []);*/
 
     return (
         <div>

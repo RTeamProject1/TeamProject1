@@ -5,16 +5,13 @@ import Header from './Header';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import { db } from "./firebase";
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 class TreeNode {
-    constructor(name, email, phoneNumber, date) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
+    constructor(id, password, date) {
+        this.id = id;
+        this.password = password;
         this.date = date;
-        this.children = null;
-        this.sibling = null;
     }
 }
 
@@ -24,11 +21,11 @@ class Tree {
     }
 }
 
-function addNodeInRange(tree, name, email, phoneNumber, date) {
-    const currentDate = new Date(date);
-    currentDate.setDate(currentDate.getDate() + 1);
+function addNodeInRange(tree, id, password, date) {
+    const currentDate = new Date(date*1000);
+    currentDate.setDate(currentDate.getDate()+ 2);
     
-    const newNode = new TreeNode(name, email, phoneNumber, new Date(currentDate).toJSON());
+    var newNode = new TreeNode(id, password, new Date(currentDate).toJSON());
     if (!tree.head) {
         tree.head = newNode;
     } else {
@@ -96,38 +93,34 @@ function GuestInfo() {
 
     // handleSubmit 함수는 완료 버튼을 클릭할 때 실행
     const handleSubmit = () => {
-        const userData = JSON.parse(localStorage.getItem('userData')) || {};
+        const tree = new Tree();
+        const storedUser = JSON.parse(localStorage.getItem("recentUser"));
 
-        if (!userData.tree) {
-            userData.tree = new Tree();
-        }
-
-        for (const date of dates) {
-            addNodeInRange(userData.tree, name, email, phoneNumber, date);
-        }
-
-        localStorage.setItem('userData', JSON.stringify(userData));
-        console.log(userData.tree);
-
-        const firestoreUserData = {
-            name: name,
-            email: email,
-            phoneNumber: phoneNumber,
-            dates: dates.map(date => date ? date.toISOString() : null)
-        };
-
-        addDoc(collection(db, "User"), firestoreUserData)
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-
-        setName('');
-        setEmail('');
-        setPhoneNumber('');
-        setDates([null]);
+        console.log("최근 유저 :", storedUser);
+        const fetchData = async () => {
+            console.log(tree.head);
+              const querySnapshot = await getDocs(collection(db, 'User'));
+              querySnapshot.forEach((doc) => {
+                addNodeInRange(tree, doc.data().id, doc.data().password, doc.data().date);
+              });
+            console.log(tree.head);
+          };
+          
+          
+        
+        /*for (const date of  dates){
+            const firestoreUserData = {
+                id : storedUser.id,
+                password : storedUser.password,
+                date : date
+            };
+            //addDoc(collection(db, "User"), firestoreUserData);
+        }*/
+            fetchData();
+            setName('');
+            setEmail('');
+            setPhoneNumber('');
+            setDates([null]);
     };
 
     return (
