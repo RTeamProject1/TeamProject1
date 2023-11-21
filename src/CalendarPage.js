@@ -7,14 +7,6 @@ import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import './CalandarPage.css';
 import moment from 'moment';
-/*class TreeNode {
-    constructor(id, password, date, times) {
-        this.id = id;
-        this.password = password;
-        this.date = date;
-        this.times = times;
-    }
-}*/
 function CalendarPage() {
     const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -24,9 +16,10 @@ function CalendarPage() {
         setSelectedDate(date);
     };
     console.log("날짜 : ", date);
+    
     const storedUser = JSON.parse(localStorage.getItem("room"));
     console.log("시간 : ", storedUser);
-    date.setDate(date.getDate() + 1);
+
     localStorage.setItem('currentdate', JSON.stringify(date));
     
     const handleShare = () => {

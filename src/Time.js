@@ -1,7 +1,7 @@
 import DatePicker from 'react-datepicker';
 import React, { useState } from 'react';
 import './GuestInfo.css';
-import { collection, addDoc} from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Time.css';
 import { db } from "./firebase";
@@ -46,16 +46,17 @@ function Time() {
         return hours;
       };
     
-    const handleButtonClick = () => {
+    const handleButtonClick = async() => {
         let timeArray = [];
         for (const time of times){
             console.log(time.startTime, time.deadlineTime);
             timeArray = timeArray.concat(generateHoursArray(time.startTime, time.deadlineTime));
         }
         console.log("시간 합친 거: ", timeArray);
-        //const storedUser = JSON.parse(localStorage.getItem("recentUser"));
-         const currentdate = JSON.parse(localStorage.getItem("currentdate"));
-       
+         let currentdate = new Date();
+        const storedDate = JSON.parse(localStorage.getItem("currentdate"));
+        currentdate = new Date(storedDate);
+        currentdate.setDate(currentdate.getDate());
         
         const firestoreUserData = {
             id : null,
@@ -63,11 +64,9 @@ function Time() {
             date : currentdate,
             times : timeArray
         };
-        addDoc(collection(db, "User"), firestoreUserData);
         console.log(firestoreUserData);
-
+        await addDoc(collection(db, "User"), firestoreUserData);
         handleShare(); // handleShare 함수 실행
-        
       };
 
     return (

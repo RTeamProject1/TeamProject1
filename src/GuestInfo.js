@@ -108,14 +108,14 @@ function GuestInfo() {
           
           
         
-        for (const date of  dates){
+        /*for (const date of  dates){
             const firestoreUserData = {
                 id : storedUser.id,
                 password : storedUser.password,
                 date : date
             };
-            addDoc(collection(db, "User"), firestoreUserData);
-        }
+            //addDoc(collection(db, "User"), firestoreUserData);
+        }*/
             fetchData();
             setName('');
             setEmail('');
