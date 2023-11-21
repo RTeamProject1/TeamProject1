@@ -6,6 +6,7 @@ import CreateRoom2 from './CreateRoom2';
 import CalendarPage from './CalendarPage';
 import GuestInfo from './GuestInfo';
 import List from './List';
+import Time from './Time';
 import Login from './Login';
 import { db } from './firebase';
 
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/CreateRoom" element={<CreateRoom />}></Route>
                     <Route path="/CreateRoom2" element={<CreateRoom2 />}></Route>
                     <Route path="/CalanderPage" element={<CalendarPage />}></Route>
+                    <Route path="/Time" element={<Time />}></Route>
                     <Route path="/GuestInfo" element={<GuestInfo />}></Route>
                     <Route path="/List" element={<List />}></Route>
                     <Route path="/Login" element={<Login />}></Route>

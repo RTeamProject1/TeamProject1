@@ -9,14 +9,21 @@ import './CalandarPage.css';
 import moment from 'moment';
 
 function CalendarPage() {
-    const [date, setDate] = useState(new Date());
+    //const [date, setDate] = useState(new Date());
     const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
+    const [selectedDate, setSelectedDate] = useState(null);
+    
+    const handleDateClick = (date) => {
+        setSelectedDate(date);
+    };
 
     const handleShare = () => {
         navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
     };
-
+    const handleOpenPopup = () => {
+        Window = window.open('Time', 'popup', 'width=500,height=500');
+      };
     return (
         <>
             <Header />
@@ -24,11 +31,17 @@ function CalendarPage() {
                 <div className="calendar-container">
                     <Calendar
                         className="calendar"
-                        onChange={setDate}
-                        value={date}
+                        //onChange={setDate}
+                        //value={date}
                         formatDay={(locale, date) => moment(date).format('DD')}
                         calendarType={'US'}
+                        onChange={handleDateClick}
+                        value={selectedDate}
+                        onClickDay={handleDateClick}
                     />
+                    <button className="btn btn-success submit-btn" onClick={handleOpenPopup}>
+                        일정 넣기
+                    </button>
                 </div>
                 <div className="participants-container">
                     <Link to="/GuestInfo">
