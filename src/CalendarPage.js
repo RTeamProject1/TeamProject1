@@ -7,16 +7,28 @@ import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import './CalandarPage.css';
 import moment from 'moment';
-
+/*class TreeNode {
+    constructor(id, password, date, times) {
+        this.id = id;
+        this.password = password;
+        this.date = date;
+        this.times = times;
+    }
+}*/
 function CalendarPage() {
-    //const [date, setDate] = useState(new Date());
     const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [date, setDate] = useState(new Date());
     
     const handleDateClick = (date) => {
         setSelectedDate(date);
     };
-
+    console.log("날짜 : ", date);
+    const storedUser = JSON.parse(localStorage.getItem("room"));
+    console.log("시간 : ", storedUser);
+    date.setDate(date.getDate() + 1);
+    localStorage.setItem('currentdate', JSON.stringify(date));
+    
     const handleShare = () => {
         navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
@@ -24,6 +36,7 @@ function CalendarPage() {
     const handleOpenPopup = () => {
         Window = window.open('Time', 'popup', 'width=500,height=500');
       };
+
     return (
         <>
             <Header />
@@ -35,7 +48,8 @@ function CalendarPage() {
                         //value={date}
                         formatDay={(locale, date) => moment(date).format('DD')}
                         calendarType={'US'}
-                        onChange={handleDateClick}
+                        //onChange={handleDateClick}
+                        onChange={setDate}
                         value={selectedDate}
                         onClickDay={handleDateClick}
                     />

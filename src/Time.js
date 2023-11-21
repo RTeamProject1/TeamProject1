@@ -1,9 +1,10 @@
 import DatePicker from 'react-datepicker';
-//import InputMask from 'react-input-mask';
-
+import React, { useState } from 'react';
+import './GuestInfo.css';
+import { collection, addDoc} from 'firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Time.css';
-import { useState } from 'react'
+import { db } from "./firebase";
 
 function Time() {
     const [startTime, setStartTime] = useState(null);
@@ -26,27 +27,47 @@ function Time() {
         setTimes(updatedTimes);
       };
     
-      const handleDeadlineTimeChange = (date, index) => {
+    const handleDeadlineTimeChange = (date, index) => {
         const updatedTimes = [...times];
         setDeadlineTime(date);
         updatedTimes[index] = { ...updatedTimes[index], deadlineTime: date };
         setTimes(updatedTimes);
       };
-    const saveRoom = () => {
-        const roomInfo = {
-            startTime: startTime,
-            deadlineTime: deadlineTime,
-        };
 
-        // Convert the object to a JSON string and store it in localStorage
-        localStorage.setItem('room', JSON.stringify(roomInfo));
-        console.log(
-            `방 정보: 시작 시간 - ${startTime}, 종료 시간 - ${deadlineTime}`
-        );
-    };
+      const generateHoursArray = (start, end) => {
+        const hours = [];
+        let currentTime = new Date(start);
+        const adjustedEndTime = new Date(end.getTime() + 60 * 1000);
+        while (currentTime <= adjustedEndTime) {
+          hours.push(currentTime.getHours());
+          currentTime = new Date(currentTime.getTime() + 60 * 60 * 1000); // 1시간 추가
+        }
+      
+        return hours;
+      };
+    
     const handleButtonClick = () => {
-        saveRoom(); // saveRoom 함수 실행
+        let timeArray = [];
+        for (const time of times){
+            console.log(time.startTime, time.deadlineTime);
+            timeArray = timeArray.concat(generateHoursArray(time.startTime, time.deadlineTime));
+        }
+        console.log("시간 합친 거: ", timeArray);
+        //const storedUser = JSON.parse(localStorage.getItem("recentUser"));
+         const currentdate = JSON.parse(localStorage.getItem("currentdate"));
+       
+        
+        const firestoreUserData = {
+            id : null,
+            password : null,
+            date : currentdate,
+            times : timeArray
+        };
+        addDoc(collection(db, "User"), firestoreUserData);
+        console.log(firestoreUserData);
+
         handleShare(); // handleShare 함수 실행
+        
       };
 
     return (
