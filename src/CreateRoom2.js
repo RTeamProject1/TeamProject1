@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 //import InputMask from 'react-input-mask';
-
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateRoom2.css';
 import Header from './Header';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
+import { db } from "./firebase";
 
 function CreateRoom2() {
     const [startDate, setStartDate] = useState(null);
@@ -35,7 +36,7 @@ function CreateRoom2() {
         setDeadlineTime(date);
     };
 
-    const saveRoom = () => {
+    const saveRoom = async () => {
         const roomInfo = {
             name: roomName,
             startDate: startDate,
@@ -45,7 +46,8 @@ function CreateRoom2() {
         };
 
         // Convert the object to a JSON string and store it in localStorage
-        localStorage.setItem('room', JSON.stringify(roomInfo));
+        //localStorage.setItem('room', JSON.stringify(roomInfo));
+        await addDoc(collection(db, "RoomInfo"), roomInfo);
         console.log(
             `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`
         );
