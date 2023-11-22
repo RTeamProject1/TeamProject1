@@ -23,7 +23,7 @@ function Header() {
                     <Link to="/landing" className="btn btn-outline-secondary me-2">
                         로그아웃
                     </Link>
-                    <Link to="/#" className="btn btn-outline-secondary me-2">
+                    <Link to="/MyInfo" className="btn btn-outline-secondary me-2">
                         내정보
                     </Link>
                     <Link to="/terms" className="btn btn-outline-secondary me-2">

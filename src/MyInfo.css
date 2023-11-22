@@ -1,0 +1,59 @@
+.RoomInfo   {
+    display: flex;
+    align-items: center;
+    width: 900px;
+    height: 250px;
+    margin: 0 auto;
+  }
+  
+  .headterTextStyleContainer {
+    display: flex;
+    align-items: center;
+  }
+  .headterTextStyle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 50px; /* Not Scheduled와의 간격 조정 */
+    margin-left: 30px;
+    
+  }
+  .NameMeetingContainer{
+    display: flex;
+    text-align: left;
+    margin-left : 350px;
+    align-items: flex-start; 
+  }
+  .NameMeeting{
+    display: flex;
+    font-size : 30px;
+    margin-left: 30px;
+    margin-bottom : 100px;
+  } 
+  .infoContainer {
+    flex-direction:  column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+
+  button {
+    background-color: white;
+    border-radius: 10px;
+    border: #7fb77e solid;
+    transition: background-color 0.3s ease;
+  }
+  button p {
+    color: #7fb77e;
+    transition: color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #7fb77e; /* 마우스 호버 시 배경색 변경 */
+  }
+  
+  button:hover p {
+    color: white; /* 마우스 호버 시 글씨 색상 변경 */
+  }
+  .ScheduledContainer {
+    margin-top: 10px;
+  }

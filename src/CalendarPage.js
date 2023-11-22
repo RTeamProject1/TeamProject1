@@ -5,7 +5,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
-import './CalandarPage.css';
+import './CalendarPage.css';
 import moment from 'moment';
 function CalendarPage() {
     const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
