@@ -55,16 +55,19 @@ function Time() {
         console.log("시간 합친 거: ", timeArray);
          let currentdate = new Date();
         const storedDate = JSON.parse(localStorage.getItem("currentdate"));
+        const storedUser = JSON.parse(localStorage.getItem("currentUser"));
         currentdate = new Date(storedDate);
         currentdate.setDate(currentdate.getDate());
         
         const firestoreUserData = {
-            id : null,
-            password : null,
+            name : storedUser.name,
+            email : storedUser.email,
             date : currentdate,
             times : timeArray
         };
         console.log(firestoreUserData);
+        //console.log(storedUser);
+        //console.log(storedDate.name, storedUser.email,currentdate,timeArray);
         await addDoc(collection(db, "User"), firestoreUserData);
         handleShare(); // handleShare 함수 실행
       };
