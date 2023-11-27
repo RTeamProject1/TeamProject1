@@ -8,6 +8,7 @@ import GuestInfo from './GuestInfo';
 import List from './List';
 import Time from './Time';
 import Login from './Login';
+import MyInfo from './MyInfo';
 import { db } from './firebase';
 
 function App() {
@@ -18,10 +19,11 @@ function App() {
                     <Route path="/" element={<Landing />}></Route>
                     <Route path="/CreateRoom" element={<CreateRoom />}></Route>
                     <Route path="/CreateRoom2" element={<CreateRoom2 />}></Route>
-                    <Route path="/CalanderPage" element={<CalendarPage />}></Route>
+                    <Route path="/CalendarPage" element={<CalendarPage />}></Route>
                     <Route path="/Time" element={<Time />}></Route>
                     <Route path="/GuestInfo" element={<GuestInfo />}></Route>
                     <Route path="/List" element={<List />}></Route>
+                    <Route path="/MyInfo" element={<MyInfo />}></Route>
                     <Route path="/Login" element={<Login />}></Route>
                 </Routes>
             </Router>
