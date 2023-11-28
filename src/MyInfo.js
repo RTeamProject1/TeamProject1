@@ -8,8 +8,8 @@ function MyInfo() {
    const [RoomName,setRoomName] = useState('');
    const [name,setName] = useState('');
    const [title,setTitle] = useState('');
-   const [startTime,setStartTime] = useState('');
-   const [endTime,setEndTime] = useState('');
+   const [startDate,setStartDate] = useState('');
+   const [endDate,setEndDate] = useState('');
 
     
     useEffect(() => {
@@ -24,8 +24,8 @@ function MyInfo() {
       startDate.setDate(startDate.getDate() + 1);
       const endDate = new Date(RoomInfo.endDate);
       endDate.setDate(endDate.getDate() + 1);
-      setStartTime(startDate.toISOString().split('T')[0]);
-      setEndTime(endDate.toISOString().split('T')[0]);
+      setStartDate(startDate.toISOString().split('T')[0]);
+      setEndDate(endDate.toISOString().split('T')[0]);
       console.log(storedUser.name);
       console.log(RoomInfo);
     }, []);
@@ -45,7 +45,7 @@ function MyInfo() {
                 <div className="infoContainer">
                   <p>{RoomName}</p>
                   <p>{title}</p>
-                  <p>{startTime} ~ {endTime}</p>
+                  <p>{startDate} ~ {endDate}</p>
                 </div>
               </div>
             </button>

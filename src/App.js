@@ -9,6 +9,7 @@ import List from './List';
 import Time from './Time';
 import Login from './Login';
 import MyInfo from './MyInfo';
+import SignUp from './SignUp';
 import { db } from './firebase';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/List" element={<List />}></Route>
                     <Route path="/MyInfo" element={<MyInfo />}></Route>
                     <Route path="/Login" element={<Login />}></Route>
+                    <Route path="/SignUp" element={<SignUp />}></Route>
                 </Routes>
             </Router>
         </div>

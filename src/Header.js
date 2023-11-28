@@ -20,8 +20,8 @@ function Header() {
                     <Link to="/login" className="btn btn-outline-secondary me-2">
                         로그인
                     </Link>
-                    <Link to="/landing" className="btn btn-outline-secondary me-2">
-                        로그아웃
+                    <Link to="/SignUp" className="btn btn-outline-secondary me-2">
+                        회원가입
                     </Link>
                     <Link to="/MyInfo" className="btn btn-outline-secondary me-2">
                         내정보

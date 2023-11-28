@@ -1,6 +1,6 @@
 import React from 'react';
 import './Login.css';
-import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "./firebase";
+import { auth,  signInWithEmailAndPassword } from "./firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
@@ -16,41 +16,7 @@ function Login() {
     const [isAppropriate, setIsAppropriate] = useState(true); // 로그인 유효성 여부
     const [userName, setUserName] = useState("");
 
-    const register = async () => {
-      try {
-        setErrorMsg('　');
-        const createdUser = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
-        //console.log(createdUser);
-        setRegisterEmail("");
-        setRegisterPassword("");
-        const user = auth.currentUser;
-
-    // 이름 정보 추가
-        await updateProfile(user, {
-        displayName: userName
-        });
-
-        const userData = {
-        email: registerEmail,
-        displayName: user.displayName // 이 이름을 추가하여 저장할 수 있습니다.
-    };
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        console.log("회원가입 성공");
-      } catch(err){
-        //console.log(err.code);
-        switch (err.code) {
-          case 'auth/weak-password':
-            setErrorMsg('비밀번호는 6자리 이상이어야 합니다');
-            break;
-          case 'auth/invalid-email':
-            setErrorMsg('잘못된 이메일 주소입니다');
-            break;
-          case 'auth/email-already-in-use':
-            setErrorMsg('이미 가입되어 있는 계정입니다');
-            break;
-          }
-        }
-    }  
+    
     const login = async () => {
       try {
         const curUserInfo = await signInWithEmailAndPassword(auth, typingEmail, typingPassword);
@@ -82,47 +48,25 @@ function Login() {
       .catch((err) => {
         console.log(err);
       });
+    }
 
-  }
     return (
         <div class="login-box">
             <h2>소셜로그인으로 간편하게 로그인</h2>
-            <a href="#" class="social-button" id="apple-connect">
+            {/*<a href="#" class="social-button" id="apple-connect">
                 {' '}
                 <span>Log in with Apple</span>
-            </a>
+            </a>*/}
             <a href="#" onClick={handleGoogleLogin} class="social-button" id="google-connect">
                 {' '}
                 <span>Log in with Google</span>
             </a>
-      <div>
-        {userData
-          ? "당신의 이름은 : " + userData.displayName
-          : "로그인 버튼을 눌러주세요 :)"}
-      </div>
-      <div>
-                <h3>회원가입</h3>
-                <input
-                    type="email"
-                    placeholder="이메일"
-                    value={registerEmail}
-                    onChange={(e) => setRegisterEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="비밀번호"
-                    value={registerPassword}
-                    onChange={(e) => setRegisterPassword(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="이름"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                />
-                <button onClick={register}>회원가입</button>
-                {errorMsg && <p>{errorMsg}</p>}
+            <div>
+              {userData
+                ? "당신의 이름은 : " + userData.displayName
+                : "로그인 버튼을 눌러주세요 :)"}
             </div>
+            
             <div>
                 <h3>로그인</h3>
                 <input

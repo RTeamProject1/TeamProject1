@@ -64,3 +64,7 @@
     flex: 3; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
     margin-top: 20px;
 }
+
+.has-data {
+    background-color: #7fb77e;
+  }
