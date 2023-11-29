@@ -58,17 +58,19 @@ function Time() {
         const storedUser = JSON.parse(localStorage.getItem("currentUser"));
         currentdate = new Date(storedDate);
         currentdate.setDate(currentdate.getDate());
-        
+        const storedValue = localStorage.getItem('currentRoom');
+        const parsedValue = JSON.parse(storedValue);
         const firestoreUserData = {
-            name : storedUser.name,
-            email : storedUser.email,
+
+            name : storedUser.userName,
+            email : storedUser.userEmail,
             date : currentdate,
-            times : timeArray
+            times : timeArray,
+            RoomName : parsedValue.name
         };
         console.log(firestoreUserData);
-        //console.log(storedUser);
-        //console.log(storedDate.name, storedUser.email,currentdate,timeArray);
-        await addDoc(collection(db, "User"), firestoreUserData);
+
+        await addDoc(collection(db, "DateInfo"), firestoreUserData);
         handleShare(); // handleShare 함수 실행
       };
 

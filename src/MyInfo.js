@@ -15,8 +15,9 @@ function MyInfo() {
     useEffect(() => {
       const storedUser = JSON.parse(localStorage.getItem("currentUser"));
       setName(storedUser.name);
-      const RoomInfo = JSON.parse(localStorage.getItem("RoomInfo"));
+      const RoomInfo = JSON.parse(localStorage.getItem("currentRoom"));
   
+      
       // 여기에서 RoomInfo의 값을 상태로 설정
       setRoomName(RoomInfo.name);
       setTitle(RoomInfo.title);
@@ -28,6 +29,7 @@ function MyInfo() {
       setEndDate(endDate.toISOString().split('T')[0]);
       console.log(storedUser.name);
       console.log(RoomInfo);
+
     }, []);
     return (
       <div>

@@ -94,7 +94,7 @@ function GuestInfo() {
     // handleSubmit 함수는 완료 버튼을 클릭할 때 실행
     const handleSubmit = () => {
         const tree = new Tree();
-        const storedUser = JSON.parse(localStorage.getItem("recentUser"));
+        const storedUser = JSON.parse(localStorage.getItem("currentUser"));
 
         console.log("최근 유저 :", storedUser);
         const fetchData = async () => {
@@ -106,16 +106,7 @@ function GuestInfo() {
             console.log(tree.head);
           };
           
-          
         
-        /*for (const date of  dates){
-            const firestoreUserData = {
-                id : storedUser.id,
-                password : storedUser.password,
-                date : date
-            };
-            //addDoc(collection(db, "User"), firestoreUserData);
-        }*/
             fetchData();
             setName('');
             setEmail('');

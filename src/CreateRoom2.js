@@ -37,18 +37,19 @@ function CreateRoom2() {
     };
 
     const saveRoom = async () => {
+        const storedUser = JSON.parse(localStorage.getItem("currentUser"));
         const roomInfo = {
-            name: roomName,
-            startDate: startDate,
-            endDate: endDate,
-            maxPeople: maxPeople,
-            deadlineTime: deadlineTime,
+            name : roomName,
+            startDate : startDate,
+            endDate : endDate,
+            maxPeople : maxPeople,
+            deadlineTime : deadlineTime,
+            managerName : storedUser.name,
+            manegerEmail : storedUser.email
         };
-
-        // Convert the object to a JSON string and store it in localStorage
-        //localStorage.setItem('room', JSON.stringify(roomInfo));
+        
         await addDoc(collection(db, "RoomInfo"), roomInfo);
-        localStorage.setItem('RoomInfo', JSON.stringify(roomInfo));
+        localStorage.setItem('currentRoom', JSON.stringify(roomInfo));
         console.log(
             `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`
         );

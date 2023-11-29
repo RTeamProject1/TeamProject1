@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // <a href>를 사용하면 warning이 나와서 <Link to>로 변경했습니다.
 
 function Header() {
+    
     return (
         <header className="bg-light p-3">
             <div className="container d-flex justify-content-between align-items-center">
