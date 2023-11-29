@@ -61,7 +61,6 @@ function Time() {
         const storedValue = localStorage.getItem('currentRoom');
         const parsedValue = JSON.parse(storedValue);
         const firestoreUserData = {
-
             name : storedUser.userName,
             email : storedUser.userEmail,
             date : currentdate,
