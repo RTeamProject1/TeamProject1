@@ -30,11 +30,7 @@ function Login() {
         displayName: userName
         });
 
-        const userData = {
-        email: registerEmail,
-        displayName: user.displayName // 이 이름을 추가하여 저장할 수 있습니다.
-    };
-        localStorage.setItem('currentUser', JSON.stringify(userData));
+   
         console.log("회원가입 성공");
       } catch(err){
         //console.log(err.code);
@@ -56,7 +52,12 @@ function Login() {
         const curUserInfo = await signInWithEmailAndPassword(auth, typingEmail, typingPassword);
         // console.log(curUserInfo);
         setUser(curUserInfo.user);
+        localStorage.setItem('currentUser', JSON.stringify(curUserInfo.user));
         console.log("로그인 성공")
+        const userData = {
+          email: user.registerEmail,
+          displayName: user.displayName // 이 이름을 추가하여 저장할 수 있습니다.
+          };
       } catch(err){
         setIsAppropriate(false);
         // console.log(err.code);
