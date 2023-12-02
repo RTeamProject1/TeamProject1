@@ -52,18 +52,21 @@ function Time() {
             console.log(time.startTime, time.deadlineTime);
             timeArray = timeArray.concat(generateHoursArray(time.startTime, time.deadlineTime));
         }
-        console.log("시간 합친 거: ", timeArray);
-         let currentdate = new Date();
+        //console.log("시간 합친 거: ", timeArray);
+        //let currentdate = new Date();
         const storedDate = JSON.parse(localStorage.getItem("currentdate"));
         const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-        currentdate = new Date(storedDate);
+        console.log(currentdate);
+        var currentdate = new Date(storedDate);
         currentdate.setDate(currentdate.getDate());
+
         const storedValue = localStorage.getItem('currentRoom');
         const parsedValue = JSON.parse(storedValue);
+        
         const firestoreUserData = {
             name : storedUser.userName,
             email : storedUser.userEmail,
-            date : currentdate,
+            date : currentdate,                         
             times : timeArray,
             RoomName : parsedValue.name
         };
