@@ -10,7 +10,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // <a href>를 사용하면 warning이 나와서 <Link to>로 변경했습니다.
 
 function Header() {
-    
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentRoom = JSON.parse(localStorage.getItem('currentRoom'));
+
     return (
         <header className="bg-light p-3">
             <div className="container d-flex justify-content-between align-items-center">
@@ -18,9 +20,16 @@ function Header() {
                     <FontAwesomeIcon icon={faCalendar} /> <span>Mannam2</span>
                 </Link>
                 <div className="menu-bar">
-                    <Link to="/login" className="btn btn-outline-secondary me-2">
-                        로그인
-                    </Link>
+                    {storedUser === null ? (
+                        <Link to="/login" className="btn btn-outline-secondary me-2">
+                            로그인
+                        </Link>
+                    ) : (
+                        <Link to="/logout" className="btn btn-outline-secondary me-2">
+                            로그아웃
+                        </Link>
+                    )}
+
                     <Link to="/SignUp" className="btn btn-outline-secondary me-2">
                         회원가입
                     </Link>

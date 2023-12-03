@@ -8,7 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import './CalendarPage.css';
 import moment, { locale } from 'moment';
 import { collection, addDoc, getDocs, connectFirestoreEmulator } from 'firebase/firestore';
-import { db } from "./firebase";
+import { db } from './firebase';
 class Tree {
     constructor() {
         this.head = null;
@@ -34,9 +34,9 @@ function countSibling(node) {
     return a;
 }
 function addNodeInRange(tree, RoomName, userName, userEmail, date, times) {
-    const currentDate = new Date(date*1000);
+    const currentDate = new Date(date * 1000);
     currentDate.setDate(currentDate.getDate() + 2);
-    
+
     var newNode = new TreeNode(RoomName, userName, userEmail, new Date(currentDate).toJSON(), times);
     if (!tree.head) {
         tree.head = newNode;
@@ -117,39 +117,46 @@ function CalendarPage() {
     console.log(date);
     const tree = new Tree();
     //console.log("날짜 : ", date);
-    //const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
     //const storedUser = JSON.parse(localStorage.getItem("room"));
-    //console.log("시간 : ", storedUser);
+    console.log('storedUser : ', storedUser);
     const storedValue = localStorage.getItem('currentRoom');
     const parsedValue = JSON.parse(storedValue);
     const fetchData = async () => {
         //console.log(tree.head);
-          const querySnapshot = await getDocs(collection(db, 'DateInfo'));
-          querySnapshot.forEach((doc) => {
-            if (parsedValue.name === doc.data().RoomName){
-                addNodeInRange(tree, doc.data().RoomName, doc.data().name, doc.data().email, doc.data().date, doc.data().times);
+        const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+        console.log('-- currentRoom.name: ', parsedValue.name);
+        querySnapshot.forEach((doc) => {
+            if (parsedValue.name === doc.data().RoomName) {
+                addNodeInRange(
+                    tree,
+                    doc.data().RoomName,
+                    doc.data().name,
+                    doc.data().email,
+                    doc.data().date,
+                    doc.data().times
+                );
             }
-          });
-            console.log(tree.head); 
-            const sortedRoot = insertionSortLCRSTree(tree.head);
-            console.log("정렬된 트리: ", sortedRoot);
-      };
+        });
+        console.log(tree.head);
+        const sortedRoot = insertionSortLCRSTree(tree.head);
+        console.log('정렬된 트리: ', sortedRoot);
+    };
 
-      fetchData();
+    fetchData();
     localStorage.setItem('currentdate', JSON.stringify(date));
-    
-   
+
     const handleShare = () => {
         navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
     };
-    
+
     const handleOpenPopup = () => {
         Window = window.open('Time', 'popup', 'width=500,height=500');
         if (selectedDate) {
             setDataDates((prevDataDates) => [...prevDataDates, selectedDate]);
-          }
-      };
+        }
+    };
     const isDataDate = (date) => {
         // 데이터가 있는 일자인지 확인하는 함수
         return dataDates.some((dataDate) => moment(dataDate).isSame(date, 'day'));
@@ -169,9 +176,7 @@ function CalendarPage() {
                         onChange={setDate}
                         value={selectedDate}
                         onClickDay={handleDateClick}
-                        tileClassName={({ date, view }) =>
-                            view === 'month' && isDataDate(date) ? 'has-data' : ''
-                        }
+                        tileClassName={({ date, view }) => (view === 'month' && isDataDate(date) ? 'has-data' : '')}
                     />
                     <button className="btn btn-success submit-btn" onClick={handleOpenPopup}>
                         일정 넣기

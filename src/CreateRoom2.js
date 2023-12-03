@@ -7,7 +7,7 @@ import './CreateRoom2.css';
 import Header from './Header';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
-import { db } from "./firebase";
+import { db } from './firebase';
 
 function CreateRoom2() {
     const [startDate, setStartDate] = useState(null);
@@ -37,22 +37,29 @@ function CreateRoom2() {
     };
 
     const saveRoom = async () => {
-        const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-        
+        const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+        console.log('-- storedUser -> ', storedUser);
+
         const roomInfo = {
-            name : roomName,
-            startDate : startDate,
-            endDate : endDate,
-            maxPeople : maxPeople,
-            deadlineTime : deadlineTime,
-            managerName : storedUser.userName,
-            manegerEmail : storedUser.userEmail
+            name: roomName,
+            startDate: startDate,
+            endDate: endDate,
+            maxPeople: maxPeople,
+            deadlineTime: deadlineTime,
+            managerName: storedUser.displayname != null ? storedUser.displayname : storedUser.userName,
+            manegerEmail: storedUser.email != null ? storedUser.email : storedUser.userEmail,
         };
-        console.log(roomInfo);
-        await addDoc(collection(db, "RoomInfo"), roomInfo);
+
+        console.log('-- rommInfo -> ', roomInfo);
+
         localStorage.setItem('currentRoom', JSON.stringify(roomInfo));
+        const currentRoom = JSON.parse(localStorage.getItem('currentRoom'));
+        console.log('-- 방정보 ->: ', currentRoom);
+
+        await addDoc(collection(db, 'RoomInfo'), roomInfo);
+
         //console.log(
-          //  `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`
+        //  `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`
         //);
     };
 
