@@ -1,7 +1,7 @@
 import DatePicker from 'react-datepicker';
 import React, { useState } from 'react';
 import './GuestInfo.css';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Time.css';
 import { db } from "./firebase";
@@ -46,35 +46,62 @@ function Time() {
         return hours;
       };
     
-    const handleButtonClick = async() => {
+      const handleButtonClick = async() => {
         let timeArray = [];
         for (const time of times){
             console.log(time.startTime, time.deadlineTime);
             timeArray = timeArray.concat(generateHoursArray(time.startTime, time.deadlineTime));
         }
-        //console.log("시간 합친 거: ", timeArray);
-        //let currentdate = new Date();
         const storedDate = JSON.parse(localStorage.getItem("currentdate"));
         const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-        console.log(currentdate);
+        console.log(storedDate);
         var currentdate = new Date(storedDate);
         currentdate.setDate(currentdate.getDate());
 
         const storedValue = localStorage.getItem('currentRoom');
         const parsedValue = JSON.parse(storedValue);
-        
-        const firestoreUserData = {
-            name : storedUser.userName,
-            email : storedUser.userEmail,
-            date : currentdate,                         
-            times : timeArray,
-            RoomName : parsedValue.name
-        };
-        console.log(firestoreUserData);
+ 
+        const collectionRef = collection(db, "DateInfo");
+    
+        let boolean = false;
+        const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+        for (const docSnapShot of querySnapshot.docs) {
+            console.log(parsedValue.name, storedUser.userName, storedUser.userEmail);
+            console.log(docSnapShot.data().RoomName, docSnapShot.data().name, docSnapShot.data().email);
+            console.log(docSnapShot.data().date.toDate().toISOString(), currentdate.toISOString())
+            if (parsedValue.name === docSnapShot.data().RoomName && docSnapShot.data().name === storedUser.userName && docSnapShot.data().email === storedUser.userEmail && docSnapShot.data().date.toDate().toISOString() === currentdate.toISOString()){
+                    // 기존 문서가 존재할 때, 해당 문서의 'times' 필드에 새로운 시간을 추가
+                    const existingData = docSnapShot.data();
+                    const updatedTimes = Array.from(new Set(existingData.times.concat(timeArray)));
+                    const docRef = doc(db, 'DateInfo', docSnapShot.id);
+                    await updateDoc(docRef, { times: updatedTimes });
+                    console.log("종료");
+                    // 루프 종료
+                    boolean = true;
+                    return;
+                
+            }
+        }
 
-        await addDoc(collection(db, "DateInfo"), firestoreUserData);
+        if (!boolean){
+                const firestoreUserData = {
+                    name: storedUser.userName,
+                    email: storedUser.userEmail,
+                    date: currentdate,
+                    times: timeArray,
+                    RoomName: parsedValue.name
+                }  
+    
+            console.log(firestoreUserData);
+            await addDoc(collectionRef, firestoreUserData);
+            
+
+        };
+            
+        
         handleShare(); // handleShare 함수 실행
       };
+
 
     return (
         <div>
