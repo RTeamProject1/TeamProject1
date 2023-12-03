@@ -7,9 +7,11 @@ body {
     padding: 0;
     margin: 0;
 }
-
+h3 {
+    font-size: 12px;
+}
 .login-box {
-    background: ;
+    background: white;
     padding: 20px;
     max-width: 480px;
     margin: 25vh auto;
@@ -26,9 +28,30 @@ body {
     margin: 20px 0 20px;
     padding: 0;
     text-transform: uppercase;
-    color: #4688f1;
+    color: #7fb77e;
 }
-
+.custom-button{
+    background-color: #7fb77e;
+    margin-top : 10px;
+    color : white;
+    width: 200px; /* 원하는 너비 값으로 변경 */
+    height: 50px; /* 원하는 높이 값으로 변경 */
+    border-radius : 30px;
+}
+.custom-button:hover {
+    background-color: #198754;
+    border : none;
+  }
+.container1 {
+    display: flex;
+    flex-direction: column;
+    margin-top : 15px;
+    align-items: center;
+  }
+  
+.container input {
+    margin-bottom: 20px;
+  }
 .social-button {
     background-position: 25px 0px;
     box-sizing: border-box;

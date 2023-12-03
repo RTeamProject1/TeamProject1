@@ -8,21 +8,26 @@ import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 function Login() {
     const [userData, setUserData] = useState(null);
-    const [registerEmail, setRegisterEmail] = useState('');
-    const [registerPassword, setRegisterPassword] = useState('');
-    const [errorMsg, setErrorMsg] = useState('　');
+    //const [registerEmail, setRegisterEmail] = useState("");
+    //const [registerPassword, setRegisterPassword] = useState("");
+    //const [errorMsg, setErrorMsg] = useState("　");
     const [typingEmail, setTypingEmail] = useState(''); // 이메일 입력값
     const [typingPassword, setTypingPassword] = useState(''); // 비밀번호 입력값
     const [user, setUser] = useState(null); // 로그인된 사용자 정보
     const [isAppropriate, setIsAppropriate] = useState(true); // 로그인 유효성 여부
-    const [userName, setUserName] = useState('');
+    //const [userName, setUserName] = useState("");
+
+    const handleShare = async () => {
+        await login(); // login 함수 실행
+    };
 
     const login = async () => {
         try {
             const curUserInfo = await signInWithEmailAndPassword(auth, typingEmail, typingPassword);
             // console.log(curUserInfo);
             setUser(curUserInfo.user);
-            console.log('로그인 성공');
+            alert('로그인 완료');
+            window.history.back();
         } catch (err) {
             setIsAppropriate(false);
             // console.log(err.code);
@@ -67,32 +72,34 @@ function Login() {
 
     return (
         <div class="login-box">
-            <h2>소셜로그인으로 간편하게 로그인</h2>
+            <h2>Sign in</h2>
             {/*<a href="#" class="social-button" id="apple-connect">
                 {' '}
                 <span>Log in with Apple</span>
             </a>*/}
             <a href="#" onClick={handleGoogleLogin} class="social-button" id="google-connect">
                 {' '}
-                <span>Log in with Google</span>
+                <span>Sign in with Google</span>
             </a>
-            <div>{userData ? '당신의 이름은 : ' + userData.displayName : '로그인 버튼을 눌러주세요 :)'}</div>
+            <div>{userData ? '당신의 이름은 : ' + userData.displayName : ''}</div>
 
-            <div>
-                <h3>로그인</h3>
+            <div className="container1">
+                <h3>or use your account</h3>
                 <input
                     type="email"
-                    placeholder="이메일"
+                    placeholder="Email"
                     value={typingEmail}
                     onChange={(e) => setTypingEmail(e.target.value)}
                 />
                 <input
                     type="password"
-                    placeholder="비밀번호"
+                    placeholder="Password"
                     value={typingPassword}
                     onChange={(e) => setTypingPassword(e.target.value)}
                 />
-                <button onClick={login}>로그인</button>
+                <button onClick={handleShare} className="custom-button">
+                    SIGN
+                </button>
             </div>
         </div>
     );
