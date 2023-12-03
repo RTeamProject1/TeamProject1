@@ -1,3 +1,9 @@
+html * {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+
 body {
     padding: 0;
     margin: 0;
@@ -9,17 +15,23 @@ body {
     max-width: 480px;
     margin: 25vh auto;
     text-align: center;
-    letter-spacing: 1px;
+    letter-spacing: 1px; 
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
+.SignUp-box input {
+    margin-bottom: 10px;
+  }
 .SignUp-box:hover {
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.SignUp-box h3 {
+.SignUp-box h4 {
     margin: 20px 0 20px;
     padding: 0;
     text-transform: uppercase;
-    color: #4688f1;
+    color: #7fb77e;
+    font-size : 50px;
 }

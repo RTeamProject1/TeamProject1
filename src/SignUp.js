@@ -15,6 +15,14 @@ function SignUp() {
     //const [isAppropriate, setIsAppropriate] = useState(true); // 로그인 유효성 여부
     const [userName, setUserName] = useState("");
 
+    /*const handleShare = () => {
+        alert('저장되었습니다!');
+        window.history.back();
+    };*/
+    const handleShare = async () => {
+        await register(); // register 함수 실행
+    };
+
     const register = async () => {
       try {
         setErrorMsg('　');
@@ -34,7 +42,8 @@ function SignUp() {
         displayName: user.displayName // 이 이름을 추가하여 저장할 수 있습니다.
     };
         localStorage.setItem('currentUser', JSON.stringify(userData));
-        console.log("회원가입 성공");
+        alert('회원 가입 완료했습니다');
+        window.history.back();
       } catch(err){
         //console.log(err.code);
         switch (err.code) {
@@ -53,31 +62,30 @@ function SignUp() {
         }
     }  
     return (
-        <div class="SignUp-box">
-            <div>
-                <h3>회원가입</h3>
-                <input
-                    type="email"
-                    placeholder="이메일"
-                    value={registerEmail}
-                    onChange={(e) => setRegisterEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="비밀번호"
-                    value={registerPassword}
-                    onChange={(e) => setRegisterPassword(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="이름"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                />
-                <button onClick={register}>회원가입</button>
-                {errorMsg && <p>{errorMsg}</p>}
-            </div>
+        <div class="SignUp-box">          
+            <h4>Sign up</h4>
+            <input
+                type="email"
+                placeholder="Email"
+                value={registerEmail}
+                onChange={(e) => setRegisterEmail(e.target.value)}
+            />
+            <input
+                type="password"
+                placeholder="Password"
+                value={registerPassword}
+                onChange={(e) => setRegisterPassword(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="Name"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+            />
+            <button onClick={handleShare} className="custom-button">Sign up</button>
+            {errorMsg && <p>{errorMsg}</p>}
         </div>
+        
     );
 }
 
