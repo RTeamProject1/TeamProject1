@@ -35,6 +35,7 @@ function countSibling(node) {
 }
 function addNodeInRange(tree, RoomName, userName, userEmail, date, times) {
     const currentDate = new Date(date * 1000);
+    currentDate.setFullYear(currentDate.getFullYear() - 1969);
     currentDate.setDate(currentDate.getDate() + 2);
 
     var newNode = new TreeNode(RoomName, userName, userEmail, new Date(currentDate).toJSON(), times);
@@ -141,62 +142,7 @@ function findVotersForDate(tree, targetDate) {
     return voters;
 }
 
-//insertion sort를 위한 함수 두개
-{/*function countSibling(node) {
-    let a = 0;
 
-    while (node) {
-        a++;
-        node = node.sibling;
-    }
-
-    return a;
-}*/}
-{/*
-class TreeNode {
-    constructor(name, email, phoneNumber, date) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.date = date;
-        this.children = null;
-        this.sibling = null;
-    }
-}*/}
-{/*}
-function insertionSortLCRSTree(root) {
-    if (!root) {
-        return null;
-    }
-
-    const sortedRoot = new TreeNode(0); // 더미 노드
-    let unsortedRoot = root;
-
-    while (unsortedRoot) {
-        const current = unsortedRoot;
-        unsortedRoot = unsortedRoot.children;
-
-        let prev = null;
-        let sorted = sortedRoot.children;
-
-        while (sorted && countSibling(current) <= countSibling(sorted)) {
-            prev = sorted;
-            sorted = sorted.children;
-        }
-
-        if (!prev) {
-            // 현재 노드를 정렬된 트리의 가장 앞에 삽입합니다.
-            current.children = sortedRoot.children;
-            sortedRoot.children = current;
-        } else {
-            // 이전 노드와 현재 노드 사이에 현재 노드를 삽입합니다.
-            prev.children = current;
-            current.children = sorted;
-        }
-    }
-
-    return sortedRoot.children;
-}*/}
 
 
 function CalendarPage() {
@@ -224,7 +170,7 @@ function CalendarPage() {
       const handleModify = () => {
         // 데이터 삭제 함수 호출
         deleteData(selectedDate);
-      };  
+    };  
     console.log(date);
     const tree = new Tree();
     //console.log("날짜 : ", date);
@@ -233,12 +179,19 @@ function CalendarPage() {
     console.log('storedUser : ', storedUser);
     const storedValue = localStorage.getItem('currentRoom');
     const parsedValue = JSON.parse(storedValue);
+    
     const fetchData = async () => {
         //console.log(tree.head);
         const querySnapshot = await getDocs(collection(db, 'DateInfo'));
-        console.log('-- currentRoom.name: ', parsedValue.name);
+        //console.log('-- currentRoom.name: ', parsedValue.name);
         querySnapshot.forEach((doc) => {
             if (parsedValue.name === doc.data().RoomName) {
+                /*const timestampFromFirestore = doc.data().date;
+
+                // Firestore Timestamp를 JavaScript Date 객체로 변환
+                const dateObject = timestampFromFirestore.toDate();
+                //dateObject.setFullYear(dateObject.getFullYear());
+                console.log(dateObject);*/
                 addNodeInRange(
                     tree,
                     doc.data().RoomName,
@@ -252,6 +205,16 @@ function CalendarPage() {
         console.log(tree.head);
         const sortedRoot = insertionSortLCRSTree(tree.head);
         console.log('정렬된 트리: ', sortedRoot);
+        
+
+        let currentNode = sortedRoot;
+        while (currentNode) {
+            const date = currentNode.date.split('T')[0];
+            possibleDates.push(date);
+            currentNode = currentNode.children;
+        }
+
+        setPossibleDates(possibleDates);
     };
 
     fetchData();

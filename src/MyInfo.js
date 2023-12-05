@@ -14,7 +14,7 @@ function MyInfo() {
     
     useEffect(() => {
       const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-      setName(storedUser.name);
+      setName(storedUser.displayName);
       const RoomInfo = JSON.parse(localStorage.getItem("currentRoom"));
   
       
