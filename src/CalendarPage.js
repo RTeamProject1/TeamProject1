@@ -107,41 +107,32 @@ function insertionSortLCRSTree(root) {
     return sortedRoot.children;
 }
 
-function search(node, targetDate, voters) {
+function search(node, targetDate) {
     if (!node) {
-        return;
+        return null;
     }
 
     // 현재 노드의 날짜를 JSON 문자열로 변환하여 대상 날짜와 비교
     if (new Date(node.date).toJSON() === new Date(targetDate).toJSON()) {
-        let current = node;
-        while (current) {
-            voters.push({
-                name: current.name,
-                email: current.email,
-                phoneNumber: current.phoneNumber,
-            });
-            current = current.sibling;
-        }
-        return;
+        return node;
     }
 
     // 현재 노드의 날짜가 대상 날짜보다 더 뒤에 있는 경우
     if (new Date(node.date) > new Date(targetDate)) {
-        return;
+        return null;
     }
 
-    search(node.children, targetDate, voters);
+    // 자식 노드에 대해 재귀적으로 탐색
+    return search(node.children, targetDate);
 }
 function findVotersForDate(tree, targetDate) {
-    const voters = [];
-
+    const inputDate = new Date(targetDate);
+    inputDate.setDate( inputDate.getDate() + 1);
+    const formattedDateString = inputDate.toISOString();
+    //console.log(formattedDateString);
     // 트리의 루트부터 탐색 시작
-    search(tree.head, targetDate, voters);
-
-    return voters;
+    return search(tree, formattedDateString);
 }
-
 
 
 
@@ -171,55 +162,67 @@ function CalendarPage() {
         // 데이터 삭제 함수 호출
         deleteData(selectedDate);
     };  
-    console.log(date);
+    //console.log(date);
     const tree = new Tree();
     //console.log("날짜 : ", date);
     const storedUser = JSON.parse(localStorage.getItem('currentUser'));
     //const storedUser = JSON.parse(localStorage.getItem("room"));
-    console.log('storedUser : ', storedUser);
+
     const storedValue = localStorage.getItem('currentRoom');
     const parsedValue = JSON.parse(storedValue);
     
-    const fetchData = async () => {
-        //console.log(tree.head);
-        const querySnapshot = await getDocs(collection(db, 'DateInfo'));
-        //console.log('-- currentRoom.name: ', parsedValue.name);
-        querySnapshot.forEach((doc) => {
-            if (parsedValue.name === doc.data().RoomName) {
-                /*const timestampFromFirestore = doc.data().date;
-
-                // Firestore Timestamp를 JavaScript Date 객체로 변환
-                const dateObject = timestampFromFirestore.toDate();
-                //dateObject.setFullYear(dateObject.getFullYear());
-                console.log(dateObject);*/
-                addNodeInRange(
-                    tree,
-                    doc.data().RoomName,
-                    doc.data().name,
-                    doc.data().email,
-                    doc.data().date,
-                    doc.data().times
-                );
+    useEffect(() => {
+        const fetchData = async () => {
+            //console.log(tree.head);
+            const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+            //console.log('-- currentRoom.name: ', parsedValue.name);
+            querySnapshot.forEach((doc) => {
+                if (parsedValue.name === doc.data().RoomName) {
+                    addNodeInRange(
+                        tree,
+                        doc.data().RoomName,
+                        doc.data().name,
+                        doc.data().email,
+                        doc.data().date,
+                        doc.data().times
+                    );
+                }
+            });
+            console.log(tree.head);
+            const sortedRoot = insertionSortLCRSTree(tree.head);
+            console.log('정렬된 트리: ', sortedRoot);
+            
+            setPossibleDates([]);
+            let currentNode = sortedRoot;
+            while (currentNode) {
+                const date = currentNode.date.split('T')[0];
+                possibleDates.push(date);
+                currentNode = currentNode.children;
             }
-        });
-        console.log(tree.head);
-        const sortedRoot = insertionSortLCRSTree(tree.head);
-        console.log('정렬된 트리: ', sortedRoot);
-        
+    
+            // setPossibleDates를 호출하면서 초기화된 possibleDates 배열로 업데이트
+            setPossibleDates(possibleDates);
+            console.log(possibleDates);
+            
 
-        let currentNode = sortedRoot;
-        while (currentNode) {
-            const date = currentNode.date.split('T')[0];
-            possibleDates.push(date);
-            currentNode = currentNode.children;
-        }
+            const person1 = findVotersForDate(tree.head, date);
+                let node = person1;
+                let newParticipants = [];
 
-        setPossibleDates(possibleDates);
-    };
+                while (node) {
+                    newParticipants.push(node.userName);
+                    node = node.sibling;
+                }
 
-    fetchData();
+                console.log(newParticipants);
+                setParticipants(newParticipants);
+
+                };
+
+            fetchData();
+
     localStorage.setItem('currentdate', JSON.stringify(date));
-
+}, [date]);
     const handleShare = () => {
         navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
@@ -284,8 +287,8 @@ function CalendarPage() {
                         <p key={index}>{participant}</p>
                     ))}*/}
                     <h2>참여자 목록</h2>
-                    {participants.map((participants, index) => (
-                        <p key={index}>{participants}</p>
+                    {participants.map((participant, index) => (
+                        <p key={index}>{participant}</p>
                     ))}
                 </div>
             </div>
