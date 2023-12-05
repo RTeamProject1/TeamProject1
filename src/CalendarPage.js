@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, usesort } from 'react';
 import Calendar from 'react-calendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from './Header';
 import Footer from './Footer';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarPage.css';
 import moment, { locale } from 'moment';
-import { collection, addDoc, getDocs, connectFirestoreEmulator } from 'firebase/firestore';
+import { collection, query, where, addDoc, getDocs, connectFirestoreEmulator } from 'firebase/firestore';
 import { db } from './firebase';
 class Tree {
     constructor() {
@@ -105,15 +105,126 @@ function insertionSortLCRSTree(root) {
 
     return sortedRoot.children;
 }
+
+function search(node, targetDate, voters) {
+    if (!node) {
+        return;
+    }
+
+    // 현재 노드의 날짜를 JSON 문자열로 변환하여 대상 날짜와 비교
+    if (new Date(node.date).toJSON() === new Date(targetDate).toJSON()) {
+        let current = node;
+        while (current) {
+            voters.push({
+                name: current.name,
+                email: current.email,
+                phoneNumber: current.phoneNumber,
+            });
+            current = current.sibling;
+        }
+        return;
+    }
+
+    // 현재 노드의 날짜가 대상 날짜보다 더 뒤에 있는 경우
+    if (new Date(node.date) > new Date(targetDate)) {
+        return;
+    }
+
+    search(node.children, targetDate, voters);
+}
+function findVotersForDate(tree, targetDate) {
+    const voters = [];
+
+    // 트리의 루트부터 탐색 시작
+    search(tree.head, targetDate, voters);
+
+    return voters;
+}
+
+//insertion sort를 위한 함수 두개
+{/*function countSibling(node) {
+    let a = 0;
+
+    while (node) {
+        a++;
+        node = node.sibling;
+    }
+
+    return a;
+}*/}
+{/*
+class TreeNode {
+    constructor(name, email, phoneNumber, date) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.date = date;
+        this.children = null;
+        this.sibling = null;
+    }
+}*/}
+{/*}
+function insertionSortLCRSTree(root) {
+    if (!root) {
+        return null;
+    }
+
+    const sortedRoot = new TreeNode(0); // 더미 노드
+    let unsortedRoot = root;
+
+    while (unsortedRoot) {
+        const current = unsortedRoot;
+        unsortedRoot = unsortedRoot.children;
+
+        let prev = null;
+        let sorted = sortedRoot.children;
+
+        while (sorted && countSibling(current) <= countSibling(sorted)) {
+            prev = sorted;
+            sorted = sorted.children;
+        }
+
+        if (!prev) {
+            // 현재 노드를 정렬된 트리의 가장 앞에 삽입합니다.
+            current.children = sortedRoot.children;
+            sortedRoot.children = current;
+        } else {
+            // 이전 노드와 현재 노드 사이에 현재 노드를 삽입합니다.
+            prev.children = current;
+            current.children = sorted;
+        }
+    }
+
+    return sortedRoot.children;
+}*/}
+
+
 function CalendarPage() {
-    const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
+    //const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
     const [selectedDate, setSelectedDate] = useState(null);
     const [date, setDate] = useState(new Date());
     const [dataDates, setDataDates] = useState([]); // 데이터가 있는 일자 목록
+    const [participants, setParticipants] = useState([]);
+    const [possibleDates, setPossibleDates] = useState([]);
 
     const handleDateClick = (date) => {
         setSelectedDate(date);
     };
+    const deleteData = async (date) => {
+        try {
+          // Firebase에서 해당 일정 데이터 삭제
+          //await deleteDoc(doc(db, "DateInfo", date.toISOString()));
+          console.log("일정이 삭제되었습니다.");
+          // 삭제된 데이터를 화면에서 반영하기 위해 상태 업데이트
+          setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
+        } catch (error) {
+          console.error("일정 삭제 중 오류가 발생했습니다:", error);
+        }
+      };
+      const handleModify = () => {
+        // 데이터 삭제 함수 호출
+        deleteData(selectedDate);
+      };  
     console.log(date);
     const tree = new Tree();
     //console.log("날짜 : ", date);
@@ -181,9 +292,24 @@ function CalendarPage() {
                     <button className="btn btn-success submit-btn" onClick={handleOpenPopup}>
                         일정 넣기
                     </button>
+                    <button className="btn btn-success submit-btn" onClick={handleModify}>
+                        수정
+                    </button>
+                    <button className="btn btn-success submit-btn" onClick={handleShare}>
+                        공유하기
+                    </button>
+                </div>
+                <div className="List-container">
+                    <h1>가능한 날짜 순위</h1>
+
+                    {possibleDates.slice(0, 3).map((date, dateIndex) => (
+                        <li key={dateIndex}>
+                            {dateIndex + 1}. {date}
+                        </li>
+                    ))}
                 </div>
                 <div className="participants-container">
-                    <Link to="/GuestInfo">
+                    {/*<Link to="/GuestInfo">
                         <button className="btn btn-success submit-btn me-3">참가하기</button>
                     </Link>
                     <button className="btn btn-success submit-btn" onClick={handleShare}>
@@ -193,6 +319,10 @@ function CalendarPage() {
                     <h2>참여자 목록</h2>
                     {participants.map((participant, index) => (
                         <p key={index}>{participant}</p>
+                    ))}*/}
+                    <h2>참여자 목록</h2>
+                    {participants.map((participants, index) => (
+                        <p key={index}>{participants}</p>
                     ))}
                 </div>
             </div>

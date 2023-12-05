@@ -23,18 +23,15 @@ function Login() {
 
     const login = async () => {
         try {
-            const curUserInfo = await signInWithEmailAndPassword(auth, typingEmail, typingPassword);
+            const result = await signInWithEmailAndPassword(auth, typingEmail, typingPassword);
             // console.log(curUserInfo);
-            setUser(curUserInfo.user);
+            setUser(result.user);
+            const userData = result.user;
             alert('로그인 완료');
             window.history.back();
+            localStorage.setItem('currentUser', JSON.stringify(userData));
         } catch (err) {
             setIsAppropriate(false);
-            // console.log(err.code);
-            /*
-        입력한 아이디가 없을 경우 : auth/user-not-found.
-        비밀번호가 잘못된 경우 : auth/wrong-password.
-        */
         }
     };
 
@@ -42,32 +39,47 @@ function Login() {
         const provider = new GoogleAuthProvider();
 
         try {
-            const result = await signInWithPopup(auth, provider);
-            const userData = result.user;
+          const result = await signInWithPopup(auth, provider);
+          setUser(result.user);
+          const userData = result.user;
+          //const confirmation = window.confirm('로그인이 완료되었습니다. 창을 닫으시겠습니까?');
+          /*if (confirmation) {
+            window.close(); // 사용자가 확인하면 창을 닫습니다.
+          }*/
+          alert('로그인 완료');
+          window.history.back();
+          localStorage.setItem('currentUser', JSON.stringify(userData));
+          //console.log("로그인 성공")  
+      } catch (err) {
+          console.error(err);
+      }
+        // try {
+        //     const result = await signInWithPopup(auth, provider);
+        //     const userData = result.user;
 
-            console.log(userData);
+        //     console.log(userData);
 
-            const storedValue = localStorage.getItem('currentRoom');
-            const parsedValue = JSON.parse(storedValue);
-            console.log(storedValue);
+        //     const storedValue = localStorage.getItem('currentRoom');
+        //     const parsedValue = JSON.parse(storedValue);
+        //     console.log(storedValue);
 
-            if (storedValue !== null) {
-                const UserInfo = {
-                    name: parsedValue.name,
-                    startDate: parsedValue.startDate,
-                    endDate: parsedValue.endDate,
-                    maxPeople: parsedValue.maxPeople,
-                    deadlineTime: parsedValue.deadlineTime,
-                    userName: userData.displayName,
-                    userEmail: userData.email,
-                };
-                console.log('roomInfo:', UserInfo);
-                localStorage.setItem('currentUser', JSON.stringify(UserInfo));
-                await addDoc(collection(db, 'UserInfo'), UserInfo);
-            }
-        } catch (err) {
-            console.error(err);
-        }
+        //     if (storedValue !== null) {
+        //         const UserInfo = {
+        //             name: parsedValue.name,
+        //             startDate: parsedValue.startDate,
+        //             endDate: parsedValue.endDate,
+        //             maxPeople: parsedValue.maxPeople,
+        //             deadlineTime: parsedValue.deadlineTime,
+        //             userName: userData.displayName,
+        //             userEmail: userData.email,
+        //         };
+        //         console.log('roomInfo:', UserInfo);
+        //         localStorage.setItem('currentUser', JSON.stringify(UserInfo));
+        //         await addDoc(collection(db, 'UserInfo'), UserInfo);
+        //     }
+        // } catch (err) {
+        //     console.error(err);
+        // }
     };
 
     return (
