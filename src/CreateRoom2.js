@@ -7,7 +7,7 @@ import './CreateRoom2.css';
 import Header from './Header';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
-import { db } from './firebase';
+import { db } from "./firebase";
 
 function CreateRoom2() {
     const [startDate, setStartDate] = useState(null);
@@ -37,30 +37,34 @@ function CreateRoom2() {
     };
 
     const saveRoom = async () => {
-        const storedUser = JSON.parse(localStorage.getItem('currentUser'));
-        console.log('-- storedUser -> ', storedUser);
-
+        const userData = JSON.parse(localStorage.getItem("currentUser"));
         const roomInfo = {
-            name: roomName,
-            startDate: startDate,
-            endDate: endDate,
-            maxPeople: maxPeople,
-            deadlineTime: deadlineTime,
-            managerName: storedUser.displayname != null ? storedUser.displayname : storedUser.userName,
-            manegerEmail: storedUser.email != null ? storedUser.email : storedUser.userEmail,
+            name : roomName,
+            startDate : startDate,
+            endDate : endDate,
+            maxPeople : maxPeople,
+            deadlineTime : deadlineTime,
+            managerUID : userData.uid
         };
-
-        console.log('-- rommInfo -> ', roomInfo);
-
+        userData.roomName = roomInfo.name;
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        // const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+        // const roomInfo = {
+        //     name : roomName,
+        //     startDate : startDate,
+        //     endDate : endDate,
+        //     maxPeople : maxPeople,
+        //     deadlineTime : deadlineTime,
+        //     managerName : storedUser.name,
+        //     manegerEmail : storedUser.email
+        // };
+        
+        await addDoc(collection(db, "RoomInfo"), roomInfo);
         localStorage.setItem('currentRoom', JSON.stringify(roomInfo));
-        const currentRoom = JSON.parse(localStorage.getItem('currentRoom'));
-        console.log('-- 방정보 ->: ', currentRoom);
 
-        await addDoc(collection(db, 'RoomInfo'), roomInfo);
-
-        //console.log(
-        //  `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}`
-        //);
+        console.log(
+            `방 정보: 이름 - ${roomName}, 시작 날짜 - ${startDate}, 종료 날짜 - ${endDate}, 최대 인원 - ${maxPeople}, 마감 시간 - ${deadlineTime}, 방장 정보 - ${roomInfo.managerUID}`
+        );
     };
 
     return (

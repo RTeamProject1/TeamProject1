@@ -66,10 +66,7 @@ function Time() {
         let boolean = false;
         const querySnapshot = await getDocs(collection(db, 'DateInfo'));
         for (const docSnapShot of querySnapshot.docs) {
-            console.log(parsedValue.name, storedUser.userName, storedUser.userEmail);
-            console.log(docSnapShot.data().RoomName, docSnapShot.data().name, docSnapShot.data().email);
-            console.log(docSnapShot.data().date.toDate().toISOString(), currentdate.toISOString())
-            if (parsedValue.name === docSnapShot.data().RoomName && docSnapShot.data().name === storedUser.userName && docSnapShot.data().email === storedUser.userEmail && docSnapShot.data().date.toDate().toISOString() === currentdate.toISOString()){
+            if (parsedValue.name === docSnapShot.data().RoomName && docSnapShot.data().name === storedUser.displayName && docSnapShot.data().email === storedUser.email && docSnapShot.data().date.toDate().toISOString() === currentdate.toISOString()){
                     // 기존 문서가 존재할 때, 해당 문서의 'times' 필드에 새로운 시간을 추가
                     const existingData = docSnapShot.data();
                     const updatedTimes = Array.from(new Set(existingData.times.concat(timeArray)));
@@ -85,8 +82,8 @@ function Time() {
 
         if (!boolean){
                 const firestoreUserData = {
-                    name: storedUser.userName,
-                    email: storedUser.userEmail,
+                    name: storedUser.displayName,
+                    email: storedUser.email,
                     date: currentdate,
                     times: timeArray,
                     RoomName: parsedValue.name
