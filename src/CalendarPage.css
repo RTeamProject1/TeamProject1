@@ -43,7 +43,8 @@
 }
 
 .calendar-container,
-.participants-container {
+.participants-container,
+.List-container {
     margin: auto;
 }
 
@@ -55,16 +56,40 @@
     margin-top: 20px;
     border-radius: 30px;
 }
-
-.participants-container {
-    border: 3px solid;
-    border-color: #198754;
+.List-container{
+    border: none;
+    
     padding: 10px;
     width: 200px;
     flex: 3; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
     margin-top: 20px;
+    margin-right:10px;
 }
-
+.participants-container {
+    border: none;
+    
+    padding: 10px;
+    width: 200px;
+    flex: 1; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
+    margin-top: 20px;
+}
+.custom-button{
+    margin-right: 10px; /* 오른쪽 여백을 10px로 설정 */
+  }
 .has-data {
     background-color: #7fb77e;
+  }
+
+.custom-button1{
+    background-color: red;
+    margin-top : 10px;
+    color : white;
+    width: 200px; /* 원하는 너비 값으로 변경 */
+    height: 50px; /* 원하는 높이 값으로 변경 */
+    border-radius : 30px;
+    border : none;
+}
+.custom-button1:hover {
+    background-color: rgb(155, 0, 0);
+    border : none;
   }

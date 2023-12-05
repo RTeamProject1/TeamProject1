@@ -203,9 +203,11 @@ function CalendarPage() {
     //const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
     const [selectedDate, setSelectedDate] = useState(null);
     const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState([]);
     const [dataDates, setDataDates] = useState([]); // 데이터가 있는 일자 목록
     const [participants, setParticipants] = useState([]);
     const [possibleDates, setPossibleDates] = useState([]);
+    const [possibleTimes, setPossibleTimess] = useState([]);
 
     const handleDateClick = (date) => {
         setSelectedDate(date);
@@ -289,25 +291,23 @@ function CalendarPage() {
                         onClickDay={handleDateClick}
                         tileClassName={({ date, view }) => (view === 'month' && isDataDate(date) ? 'has-data' : '')}
                     />
-                    <button className="btn btn-success submit-btn" onClick={handleOpenPopup}>
-                        일정 넣기
+                    <button className="custom-button" onClick={handleOpenPopup}>
+                        일정 추가하기
                     </button>
-                    <button className="btn btn-success submit-btn" onClick={handleModify}>
-                        수정
+                    <button className="custom-button1" onClick={handleModify}>
+                        일정 삭제
                     </button>
-                    <button className="btn btn-success submit-btn" onClick={handleShare}>
-                        공유하기
-                    </button>
+                    
                 </div>
                 <div className="List-container">
-                    <h1>가능한 날짜 순위</h1>
-
+                    <h1>가능한 날짜</h1>
                     {possibleDates.slice(0, 3).map((date, dateIndex) => (
                         <li key={dateIndex}>
                             {dateIndex + 1}. {date}
                         </li>
                     ))}
-                </div>
+                </div>  
+                
                 <div className="participants-container">
                     {/*<Link to="/GuestInfo">
                         <button className="btn btn-success submit-btn me-3">참가하기</button>
@@ -320,10 +320,13 @@ function CalendarPage() {
                     {participants.map((participant, index) => (
                         <p key={index}>{participant}</p>
                     ))}*/}
-                    <h2>참여자 목록</h2>
+                    <h2>참여자</h2>
                     {participants.map((participants, index) => (
                         <p key={index}>{participants}</p>
                     ))}
+                    <button className="btn btn-success submit-btn" onClick={handleShare}>
+                        공유하기
+                    </button>
                 </div>
             </div>
             <Footer />

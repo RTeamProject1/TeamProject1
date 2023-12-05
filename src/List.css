@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
 
 .calendar-page-container {
     margin: 100px;
@@ -7,7 +7,7 @@
 }
 
 .calendar-container {
-    flex: 3; /* 달력 영역이 전체 너비의 70%를 차지 */
+    flex: 3; /* 달력 영역이 전체 너비의 70%를 차지 
     justify-content: left;
     align-items: left;
 }
@@ -33,7 +33,7 @@
 }
 
 /* App.css */
-
+/*
 .container {
     display: flex;
     justify-content: center;
@@ -75,4 +75,4 @@
     font-family : 'Gamja Flower', sans-serif;
     font-weight : bold;
     color : #198754;
-}
+}*/

@@ -116,7 +116,7 @@ function CreateRoom2() {
                         placeholderText="마감시간"
                     />
                     <div className="button-wrapper">
-                        <Link to="/CalendarPage">
+                        <Link to="/CreateRoomSuccess">
                             <button className="btn btn-success submit-btn" onClick={saveRoom}>
                                 완료
                             </button>

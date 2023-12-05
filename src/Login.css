@@ -37,6 +37,7 @@ h3 {
     width: 200px; /* 원하는 너비 값으로 변경 */
     height: 50px; /* 원하는 높이 값으로 변경 */
     border-radius : 30px;
+    border : none;
 }
 .custom-button:hover {
     background-color: #198754;

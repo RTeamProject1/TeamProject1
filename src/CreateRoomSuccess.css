@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 100px; /* 헤더와의 간격을 설정해주세요 */
+}
+
+.success-container h1,
+.success-container h2,
+.success-container button {
+  margin: 10px 0;
+}
+#landingtext {
+    font-family: 'GowunDodum-Regular';
+
+    font-size: 50px;
+}
+
+
+#landingtext2 {
+    font-family: 'GowunDodum-Regular';
+    font-size: 50px;
+    color: green;
+}

@@ -10,6 +10,7 @@ import Time from './Time';
 import Login from './Login';
 import MyInfo from './MyInfo';
 import SignUp from './SignUp';
+import CreateRoomSuccess from './CreateRoomSuccess';
 import { db } from './firebase';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/MyInfo" element={<MyInfo />}></Route>
                     <Route path="/Login" element={<Login />}></Route>
                     <Route path="/SignUp" element={<SignUp />}></Route>
+                    <Route path="/CreateRoomSuccess" element={<CreateRoomSuccess />}></Route>
                 </Routes>
             </Router>
         </div>
