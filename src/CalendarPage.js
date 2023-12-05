@@ -7,7 +7,7 @@ import Footer from './Footer';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarPage.css';
 import moment, { locale } from 'moment';
-import { collection, query, where, addDoc, getDocs, connectFirestoreEmulator } from 'firebase/firestore';
+import { collection, query, where, addDoc, getDocs, connectFirestoreEmulator,deleteDoc} from 'firebase/firestore';
 import { db } from './firebase';
 class Tree {
     constructor() {
@@ -145,39 +145,68 @@ function CalendarPage() {
     const [participants, setParticipants] = useState([]);
     const [possibleDates, setPossibleDates] = useState([]);
     const [possibleTimes, setPossibleTimess] = useState([]);
-
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+        //const storedUser = JSON.parse(localStorage.getItem("room"));
+    console.log(date);
+        const storedValue = localStorage.getItem('currentRoom');
+        const parsedValue = JSON.parse(storedValue);
     const handleDateClick = (date) => {
         setSelectedDate(date);
     };
     const deleteData = async (date) => {
         try {
+            const nextDayDate = new Date(date);
+            nextDayDate.setDate(date.getDate() + 1);
+
+            // Date 객체를 ISO 형식(2023-12-06T00:00:00.000Z)으로 변환
+            const isoFormattedDate = nextDayDate.toISOString();
+            
+
           // Firebase에서 해당 일정 데이터 삭제
           //await deleteDoc(doc(db, "DateInfo", date.toISOString()));
           console.log("일정이 삭제되었습니다.");
           // 삭제된 데이터를 화면에서 반영하기 위해 상태 업데이트
-          setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
+          //setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
+
+
+            const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+            querySnapshot.forEach(async (doc) =>{
+                const currentDate = new Date(doc.data().date * 1000);
+                currentDate.setFullYear(currentDate.getFullYear() - 1969);
+                currentDate.setDate(currentDate.getDate() + 2);
+
+                const firestoreDate = new Date(currentDate).toJSON();
+                console.log(firestoreDate);
+                console.log(isoFormattedDate);
+                console.log(storedUser.displayName);
+                console.log(doc.data().name);
+                if (firestoreDate === isoFormattedDate && storedUser.displayName === doc.data().name){
+                    
+                    await deleteDoc(doc.ref);
+                }
+            });
         } catch (error) {
           console.error("일정 삭제 중 오류가 발생했습니다:", error);
         }
       };
+
       const handleModify = () => {
         // 데이터 삭제 함수 호출
         deleteData(selectedDate);
     };  
     //console.log(date);
-    const tree = new Tree();
-    //console.log("날짜 : ", date);
-    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
-    //const storedUser = JSON.parse(localStorage.getItem("room"));
 
-    const storedValue = localStorage.getItem('currentRoom');
-    const parsedValue = JSON.parse(storedValue);
+    //console.log("날짜 : ", date);
     
+
     useEffect(() => {
-        const fetchData = async () => {
+        let fetchData = async () => {
+            const newDates = [];
+            const tree = new Tree();
             //console.log(tree.head);
             const querySnapshot = await getDocs(collection(db, 'DateInfo'));
             //console.log('-- currentRoom.name: ', parsedValue.name);
+            
             querySnapshot.forEach((doc) => {
                 if (parsedValue.name === doc.data().RoomName) {
                     addNodeInRange(
@@ -189,22 +218,31 @@ function CalendarPage() {
                         doc.data().times
                     );
                 }
+                if (parsedValue.name === doc.data().RoomName && storedUser.displayName === doc.data().name){
+                    const currentDate = new Date(doc.data().date * 1000);
+                    currentDate.setFullYear(currentDate.getFullYear() - 1969);
+                    currentDate.setDate(currentDate.getDate() + 1);
+
+                    let newDate = new Date(currentDate).toJSON();
+                    newDates.push(newDate);
+                }
             });
+
+            setDataDates(newDates);
             console.log(tree.head);
             const sortedRoot = insertionSortLCRSTree(tree.head);
             console.log('정렬된 트리: ', sortedRoot);
             
-            setPossibleDates([]);
+            //setPossibleDates([]);
             let currentNode = sortedRoot;
+            let newPossibleDates = [];
             while (currentNode) {
                 const date = currentNode.date.split('T')[0];
-                possibleDates.push(date);
+                newPossibleDates.push(date);
                 currentNode = currentNode.children;
             }
-    
-            // setPossibleDates를 호출하면서 초기화된 possibleDates 배열로 업데이트
-            setPossibleDates(possibleDates);
-            console.log(possibleDates);
+            setPossibleDates(newPossibleDates);
+            console.log(newPossibleDates);
             
 
             const person1 = findVotersForDate(tree.head, date);
@@ -216,10 +254,10 @@ function CalendarPage() {
                     node = node.sibling;
                 }
 
-                console.log(newParticipants);
+                console.log("참여자 목록 :", newParticipants);
                 setParticipants(newParticipants);
 
-                };
+            };
 
             fetchData();
 
@@ -229,7 +267,7 @@ function CalendarPage() {
         navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
     };
-
+    
     const handleOpenPopup = () => {
         Window = window.open('Time', 'popup', 'width=500,height=500');
         if (selectedDate) {
@@ -238,6 +276,7 @@ function CalendarPage() {
     };
     const isDataDate = (date) => {
         // 데이터가 있는 일자인지 확인하는 함수
+        
         return dataDates.some((dataDate) => moment(dataDate).isSame(date, 'day'));
     };
     return (
