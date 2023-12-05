@@ -165,19 +165,22 @@ function CalendarPage() {
         deleteData(selectedDate);
     };  
     //console.log(date);
-    const tree = new Tree();
+
     //console.log("날짜 : ", date);
     const storedUser = JSON.parse(localStorage.getItem('currentUser'));
     //const storedUser = JSON.parse(localStorage.getItem("room"));
 
     const storedValue = localStorage.getItem('currentRoom');
     const parsedValue = JSON.parse(storedValue);
-    
+
     useEffect(() => {
-        const fetchData = async () => {
+        let fetchData = async () => {
+            const newDates = [];
+            const tree = new Tree();
             //console.log(tree.head);
             const querySnapshot = await getDocs(collection(db, 'DateInfo'));
             //console.log('-- currentRoom.name: ', parsedValue.name);
+            
             querySnapshot.forEach((doc) => {
                 if (parsedValue.name === doc.data().RoomName) {
                     addNodeInRange(
@@ -189,22 +192,31 @@ function CalendarPage() {
                         doc.data().times
                     );
                 }
+                if (parsedValue.name === doc.data().RoomName && storedUser.displayName === doc.data().name){
+                    const currentDate = new Date(doc.data().date * 1000);
+                    currentDate.setFullYear(currentDate.getFullYear() - 1969);
+                    currentDate.setDate(currentDate.getDate() + 1);
+
+                    let newDate = new Date(currentDate).toJSON();
+                    newDates.push(newDate);
+                }
             });
+
+            setDataDates(newDates);
             console.log(tree.head);
             const sortedRoot = insertionSortLCRSTree(tree.head);
             console.log('정렬된 트리: ', sortedRoot);
             
-            setPossibleDates([]);
+            //setPossibleDates([]);
             let currentNode = sortedRoot;
+            let newPossibleDates = [];
             while (currentNode) {
                 const date = currentNode.date.split('T')[0];
-                possibleDates.push(date);
+                newPossibleDates.push(date);
                 currentNode = currentNode.children;
             }
-    
-            // setPossibleDates를 호출하면서 초기화된 possibleDates 배열로 업데이트
-            setPossibleDates(possibleDates);
-            console.log(possibleDates);
+            setPossibleDates(newPossibleDates);
+            console.log(newPossibleDates);
             
 
             const person1 = findVotersForDate(tree.head, date);
@@ -219,7 +231,7 @@ function CalendarPage() {
                 console.log(newParticipants);
                 setParticipants(newParticipants);
 
-                };
+            };
 
             fetchData();
 
@@ -238,6 +250,7 @@ function CalendarPage() {
     };
     const isDataDate = (date) => {
         // 데이터가 있는 일자인지 확인하는 함수
+        
         return dataDates.some((dataDate) => moment(dataDate).isSame(date, 'day'));
     };
     return (
