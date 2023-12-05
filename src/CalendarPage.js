@@ -7,7 +7,7 @@ import Footer from './Footer';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarPage.css';
 import moment, { locale } from 'moment';
-import { collection, query, where, addDoc, getDocs, connectFirestoreEmulator } from 'firebase/firestore';
+import { collection, query, where, addDoc, getDocs, connectFirestoreEmulator,deleteDoc} from 'firebase/firestore';
 import { db } from './firebase';
 class Tree {
     constructor() {
@@ -145,21 +145,51 @@ function CalendarPage() {
     const [participants, setParticipants] = useState([]);
     const [possibleDates, setPossibleDates] = useState([]);
     const [possibleTimes, setPossibleTimess] = useState([]);
-
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+        //const storedUser = JSON.parse(localStorage.getItem("room"));
+    console.log(date);
+        const storedValue = localStorage.getItem('currentRoom');
+        const parsedValue = JSON.parse(storedValue);
     const handleDateClick = (date) => {
         setSelectedDate(date);
     };
     const deleteData = async (date) => {
         try {
+            const nextDayDate = new Date(date);
+            nextDayDate.setDate(date.getDate() + 1);
+
+            // Date 객체를 ISO 형식(2023-12-06T00:00:00.000Z)으로 변환
+            const isoFormattedDate = nextDayDate.toISOString();
+            
+
           // Firebase에서 해당 일정 데이터 삭제
           //await deleteDoc(doc(db, "DateInfo", date.toISOString()));
           console.log("일정이 삭제되었습니다.");
           // 삭제된 데이터를 화면에서 반영하기 위해 상태 업데이트
-          setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
+          //setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
+
+
+            const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+            querySnapshot.forEach(async (doc) =>{
+                const currentDate = new Date(doc.data().date * 1000);
+                currentDate.setFullYear(currentDate.getFullYear() - 1969);
+                currentDate.setDate(currentDate.getDate() + 2);
+
+                const firestoreDate = new Date(currentDate).toJSON();
+                console.log(firestoreDate);
+                console.log(isoFormattedDate);
+                console.log(storedUser.displayName);
+                console.log(doc.data().name);
+                if (firestoreDate === isoFormattedDate && storedUser.displayName === doc.data().name){
+                    
+                    await deleteDoc(doc.ref);
+                }
+            });
         } catch (error) {
           console.error("일정 삭제 중 오류가 발생했습니다:", error);
         }
       };
+
       const handleModify = () => {
         // 데이터 삭제 함수 호출
         deleteData(selectedDate);
@@ -167,11 +197,7 @@ function CalendarPage() {
     //console.log(date);
 
     //console.log("날짜 : ", date);
-    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
-    //const storedUser = JSON.parse(localStorage.getItem("room"));
-
-    const storedValue = localStorage.getItem('currentRoom');
-    const parsedValue = JSON.parse(storedValue);
+    
 
     useEffect(() => {
         let fetchData = async () => {
@@ -228,7 +254,7 @@ function CalendarPage() {
                     node = node.sibling;
                 }
 
-                console.log(newParticipants);
+                console.log("참여자 목록 :", newParticipants);
                 setParticipants(newParticipants);
 
             };
@@ -241,7 +267,7 @@ function CalendarPage() {
         navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
     };
-
+    
     const handleOpenPopup = () => {
         Window = window.open('Time', 'popup', 'width=500,height=500');
         if (selectedDate) {
