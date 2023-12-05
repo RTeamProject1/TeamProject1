@@ -23,6 +23,8 @@
     width : 100%;
     height : 100%;
     border-radius: 10px;
+    border : none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .react-calendar__tile--active {
@@ -79,7 +81,6 @@
 .has-data {
     background-color: #7fb77e;
   }
-
 .custom-button1{
     background-color: red;
     margin-top : 10px;
@@ -93,3 +94,4 @@
     background-color: rgb(155, 0, 0);
     border : none;
   }
+
