@@ -42,14 +42,12 @@ function Login() {
           const result = await signInWithPopup(auth, provider);
           setUser(result.user);
           const userData = result.user;
-          //const confirmation = window.confirm('로그인이 완료되었습니다. 창을 닫으시겠습니까?');
-          /*if (confirmation) {
+          const confirmation = window.confirm('로그인이 완료되었습니다. 창을 닫으시겠습니까?');
+          if (confirmation) {
             window.close(); // 사용자가 확인하면 창을 닫습니다.
-          }*/
-          alert('로그인 완료');
-          window.history.back();
+          }
           localStorage.setItem('currentUser', JSON.stringify(userData));
-          //console.log("로그인 성공")  
+          console.log("로그인 성공")  
       } catch (err) {
           console.error(err);
       }
