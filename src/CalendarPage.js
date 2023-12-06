@@ -362,16 +362,19 @@ function CalendarPage() {
                     </button>
                     
                 </div>
-                
+                <div className ="share-list-container">
+                <h1>최종 순위</h1>
                 <div className="List-container">
-                    <h1>가능한 날짜</h1>
-                    {possibleDates.slice(0, 3).map((date, dateIndex) => (
+                    
+                    {possibleDates.slice(0, 10).map((date, dateIndex) => (
                         <li key={dateIndex}>
                             {dateIndex + 1}. {date}
                         </li>
                     ))}
+                </div>
                 </div>  
                 <div className ="share-container">
+                    <h2>참여자</h2>
                 <div className="participants-container">
                     {/*<Link to="/GuestInfo">
                         <button className="btn btn-success submit-btn me-3">참가하기</button>
@@ -384,7 +387,7 @@ function CalendarPage() {
                     {participants.map((participant, index) => (
                         <p key={index}>{participant}</p>
                     ))}*/}
-                    <h2>참여자</h2>
+                    
                     {participants.map((participant, index) => (
                         <p key={index}>{participant}</p>
                     ))}
