@@ -29,3 +29,31 @@
 .menu-bar a:hover {
     background-color: #ddd;
 }
+
+.custom-header{
+    background-color: white;
+}
+.custom-logout-button{
+    border : none;
+    background-color: white;
+}
+.custom-mypage-button{
+    border : none;
+    background-color: white;
+}
+.custom-use-button{
+    border : none;
+    background-color: white;
+}
+.custom-etc-button{
+    border : none;
+    background-color: white;
+}
+.custom-login-button{
+    border : none;
+    background-color: white;
+}
+.custom-user-button{
+    border : none;
+    background-color: white;
+}

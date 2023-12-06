@@ -36,22 +36,22 @@
   }
   
 
-  button {
+  .custom-info-button {
     background-color: white;
     border-radius: 10px;
     border: #7fb77e solid;
     transition: background-color 0.3s ease;
   }
-  button p {
+  .custom-info-button p {
     color: #7fb77e;
     transition: color 0.3s ease;
   }
 
-  button:hover {
+  .custom-info-button:hover {
     background-color: #7fb77e; /* 마우스 호버 시 배경색 변경 */
   }
   
-  button:hover p {
+  .custom-info-button:hover p {
     color: white; /* 마우스 호버 시 글씨 색상 변경 */
   }
   .ScheduledContainer {

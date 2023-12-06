@@ -39,7 +39,7 @@ function MyInfo() {
                 <p className="NameMeeting">{name}'s meetings</p>
             </div>
           <Link to="/CalendarPage">
-            <button>
+            <button className="custom-info-button">
               <div className="RoomInfo">
                 <div className="headterTextStyleContainer">
                   <p className="headterTextStyle">Not Scheduled</p>

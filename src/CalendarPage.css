@@ -60,20 +60,29 @@
 }
 .List-container{
     border: none;
-    
+    background-color: #ddd;
     padding: 10px;
     width: 200px;
     flex: 3; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
     margin-top: 20px;
     margin-right:10px;
+    height : 400px;
 }
 .participants-container {
     border: none;
-    
+    background-color: #ddd;
     padding: 10px;
     width: 200px;
     flex: 1; /* 참여자 목록 영역이 전체 너비의 30%를 차지 */
     margin-top: 20px;
+    height : 400px;
+}
+
+.share-container{
+    width: 200px;
+    margin-top: 300px;
+    height : 400px;
+    padding: 10px;
 }
 .custom-button{
     margin-right: 10px; /* 오른쪽 여백을 10px로 설정 */

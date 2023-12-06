@@ -104,7 +104,8 @@ function Time() {
         <div>
             <div className="content container">
                 <div className="form-container">
-                    <label>시간을 입력해주세요</label>
+                    <label>시간을 입력해주세요!!</label>
+                    <label>[+]버튼을 누르면 시간을 추가로 기입할 수 있습니다!!</label>
                     <div className="time-range-container">
                         {times.map((time, index) => (
                             <div key={index} className="time-range">
