@@ -45,6 +45,7 @@ function Login() {
           const confirmation = window.confirm('로그인이 완료되었습니다. 창을 닫으시겠습니까?');
           if (confirmation) {
             window.close(); // 사용자가 확인하면 창을 닫습니다.
+            window.history.back();
           }
           localStorage.setItem('currentUser', JSON.stringify(userData));
           console.log("로그인 성공")  
