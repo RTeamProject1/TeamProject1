@@ -135,6 +135,35 @@ function findVotersForDate(tree, targetDate) {
 }
 
 
+function quickSort(arr, indices) {
+    if (arr.length <= 1) {
+        return { sortedArray: arr, sortedIndices: indices };
+    }
+
+    const pivot = arr[0];
+    const left = [];
+    const right = [];
+    const leftIndices = [];
+    const rightIndices = [];
+
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] > pivot) {
+            left.push(arr[i]);
+            leftIndices.push(indices[i]);
+        } else {
+            right.push(arr[i]);
+            rightIndices.push(indices[i]);
+        }
+    }
+
+    const { sortedArray: sortedLeft, sortedIndices: leftSortedIndices } = quickSort(left, leftIndices);
+    const { sortedArray: sortedRight, sortedIndices: rightSortedIndices } = quickSort(right, rightIndices);
+
+    const sortedArray = sortedLeft.concat(pivot, sortedRight);
+    const finalIndices = leftSortedIndices.concat(indices[0], rightSortedIndices);
+
+    return { sortedArray, sortedIndices: finalIndices };
+}
 
 function CalendarPage() {
     //const [participants] = useState(['Participant 1', 'Participant 2', 'Participant 3']);
@@ -232,9 +261,38 @@ function CalendarPage() {
             console.log(tree.head);
             const sortedRoot = insertionSortLCRSTree(tree.head);
             console.log('정렬된 트리: ', sortedRoot);
-            
-            //setPossibleDates([]);
+
+            let newPossibleDates = [];
             let currentNode = sortedRoot;
+            while (currentNode){
+                let newArray = Array(24).fill(0);
+                let siblingNode = currentNode;
+                while (siblingNode){
+                    siblingNode.times.forEach(value => {
+                        newArray[value]++;
+                    });
+                    siblingNode = siblingNode.sibling;
+                }
+                //const timeArray = Array(24).fill(0);  // 예제에서는 크기가 24인 배열을 가정
+                const indices = Array.from({ length: newArray.length }, (_, index) => index); // [0, 1, 2, ..., 23]
+
+                const {sortedArray, sortedIndices } = quickSort(newArray, indices);
+                //console.log(newArray);
+                //console.log(sortedIndices);
+                //console.log(sortedArray);
+                for (let i = 0; i < sortedIndices.length; i++) {
+                    if (sortedArray[i] !== 0){
+                        newPossibleDates.push(currentNode.date.split('T')[0] + "  " + sortedIndices[i] + "시");
+                    }
+                }
+                currentNode = currentNode.children;
+
+            }
+            console.log(newPossibleDates);
+            setPossibleDates(newPossibleDates);
+            //console.log(newPossibleDates);
+
+            /*let currentNode = sortedRoot;
             let newPossibleDates = [];
             while (currentNode) {
                 const date = currentNode.date.split('T')[0];
@@ -242,7 +300,7 @@ function CalendarPage() {
                 currentNode = currentNode.children;
             }
             setPossibleDates(newPossibleDates);
-            console.log(newPossibleDates);
+            console.log(newPossibleDates);*/
             
 
             const person1 = findVotersForDate(tree.head, date);
