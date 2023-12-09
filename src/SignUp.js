@@ -41,7 +41,7 @@ function SignUp() {
         email: registerEmail,
         displayName: user.displayName // 이 이름을 추가하여 저장할 수 있습니다.
     };
-        localStorage.setItem('currentUser', JSON.stringify(userData));
+        //localStorage.setItem('currentUser', JSON.stringify(userData));
         alert('회원 가입 완료했습니다');
         window.history.back();
       } catch(err){

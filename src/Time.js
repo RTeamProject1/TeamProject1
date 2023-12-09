@@ -75,7 +75,6 @@ function Time() {
                     console.log("종료");
                     // 루프 종료
                     boolean = true;
-                    return;
                 
             }
         }
