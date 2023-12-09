@@ -18,6 +18,21 @@ function Login() {
     //const [userName, setUserName] = useState("");
 
     const handleShare = async () => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const roomName = urlSearchParams.get('roomName');
+        const startDate = urlSearchParams.get('startDate');
+        const endDate = urlSearchParams.get('endDate');
+
+        if (roomName && startDate && endDate) {
+            const currentRoom = {
+                name: roomName,
+                startDate: startDate,
+                endDate: endDate,
+            };
+
+            localStorage.setItem('currentRoom', JSON.stringify(currentRoom));
+        }
+
         await login(); // login 함수 실행
     };
 
@@ -37,47 +52,36 @@ function Login() {
 
     const handleGoogleLogin = async () => {
         const provider = new GoogleAuthProvider();
-
         try {
-          const result = await signInWithPopup(auth, provider);
-          setUser(result.user);
-          const userData = result.user;
-          const confirmation = window.confirm('로그인이 완료되었습니다. 창을 닫으시겠습니까?');
-          if (confirmation) {
-            window.close(); // 사용자가 확인하면 창을 닫습니다.
-          }
-          localStorage.setItem('currentUser', JSON.stringify(userData));
-          console.log("로그인 성공")  
-      } catch (err) {
-          console.error(err);
-      }
-        // try {
-        //     const result = await signInWithPopup(auth, provider);
-        //     const userData = result.user;
+            const result = await signInWithPopup(auth, provider);
+            setUser(result.user);
 
-        //     console.log(userData);
+            const userData = result.user;
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const roomName = urlSearchParams.get('roomName');
+            const startDate = urlSearchParams.get('startDate');
+            const endDate = urlSearchParams.get('endDate');
 
-        //     const storedValue = localStorage.getItem('currentRoom');
-        //     const parsedValue = JSON.parse(storedValue);
-        //     console.log(storedValue);
+            // 방 정보가 있을 경우 로컬 스토리지에 저장
+            if (roomName && startDate && endDate) {
+                const currentRoom = {
+                    name: roomName,
+                    startDate: startDate,
+                    endDate: endDate,
+                };
 
-        //     if (storedValue !== null) {
-        //         const UserInfo = {
-        //             name: parsedValue.name,
-        //             startDate: parsedValue.startDate,
-        //             endDate: parsedValue.endDate,
-        //             maxPeople: parsedValue.maxPeople,
-        //             deadlineTime: parsedValue.deadlineTime,
-        //             userName: userData.displayName,
-        //             userEmail: userData.email,
-        //         };
-        //         console.log('roomInfo:', UserInfo);
-        //         localStorage.setItem('currentUser', JSON.stringify(UserInfo));
-        //         await addDoc(collection(db, 'UserInfo'), UserInfo);
-        //     }
-        // } catch (err) {
-        //     console.error(err);
-        // }
+                localStorage.setItem('currentRoom', JSON.stringify(currentRoom));
+            }
+
+            const confirmation = window.confirm('로그인이 완료되었습니다. 창을 닫으시겠습니까?');
+            if (confirmation) {
+                window.close(); // 사용자가 확인하면 창을 닫습니다.
+            }
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            console.log("로그인 성공")
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
