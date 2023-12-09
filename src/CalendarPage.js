@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from './Header';
 import Footer from './Footer';
-//import { Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarPage.css';
 import moment, { locale } from 'moment';
@@ -174,11 +174,9 @@ function CalendarPage() {
     const [participants, setParticipants] = useState([]);
     const [possibleDates, setPossibleDates] = useState([]);
     const [possibleTimes, setPossibleTimess] = useState([]);
+    const navigate = useNavigate();
     const storedUser = JSON.parse(localStorage.getItem('currentUser'));
-        //const storedUser = JSON.parse(localStorage.getItem("room"));
-    console.log(date);
-        const storedValue = localStorage.getItem('currentRoom');
-        const parsedValue = JSON.parse(storedValue);
+    
     const handleDateClick = (date) => {
         setSelectedDate(date);
     };
@@ -189,17 +187,17 @@ function CalendarPage() {
 
             // Date 객체를 ISO 형식(2023-12-06T00:00:00.000Z)으로 변환
             const isoFormattedDate = nextDayDate.toISOString();
-            
 
-          // Firebase에서 해당 일정 데이터 삭제
-          //await deleteDoc(doc(db, "DateInfo", date.toISOString()));
-          console.log("일정이 삭제되었습니다.");
-          // 삭제된 데이터를 화면에서 반영하기 위해 상태 업데이트
-          //setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
+
+            // Firebase에서 해당 일정 데이터 삭제
+            //await deleteDoc(doc(db, "DateInfo", date.toISOString()));
+            console.log("일정이 삭제되었습니다.");
+            // 삭제된 데이터를 화면에서 반영하기 위해 상태 업데이트
+            //setDataDates((prevDataDates) => prevDataDates.filter((dataDate) => !moment(dataDate).isSame(date, "day")));
 
 
             const querySnapshot = await getDocs(collection(db, 'DateInfo'));
-            querySnapshot.forEach(async (doc) =>{
+            querySnapshot.forEach(async (doc) => {
                 const currentDate = new Date(doc.data().date * 1000);
                 currentDate.setFullYear(currentDate.getFullYear() - 1969);
                 currentDate.setDate(currentDate.getDate() + 2);
@@ -209,123 +207,44 @@ function CalendarPage() {
                 console.log(isoFormattedDate);
                 console.log(storedUser.displayName);
                 console.log(doc.data().name);
-                if (firestoreDate === isoFormattedDate && storedUser.displayName === doc.data().name){
-                    
+                if (firestoreDate === isoFormattedDate && storedUser.displayName === doc.data().name) {
+
                     await deleteDoc(doc.ref);
                 }
             });
         } catch (error) {
-          console.error("일정 삭제 중 오류가 발생했습니다:", error);
+            console.error("일정 삭제 중 오류가 발생했습니다:", error);
         }
-      };
+    };
 
-      const handleModify = () => {
+    const handleModify = () => {
         // 데이터 삭제 함수 호출
         deleteData(selectedDate);
-    };  
-    //console.log(date);
-
-    //console.log("날짜 : ", date);
-    
-
-    useEffect(() => {
-        let fetchData = async () => {
-            const newDates = [];
-            const tree = new Tree();
-            //console.log(tree.head);
-            const querySnapshot = await getDocs(collection(db, 'DateInfo'));
-            //console.log('-- currentRoom.name: ', parsedValue.name);
-            
-            querySnapshot.forEach((doc) => {
-                if (parsedValue.name === doc.data().RoomName) {
-                    addNodeInRange(
-                        tree,
-                        doc.data().RoomName,
-                        doc.data().name,
-                        doc.data().email,
-                        doc.data().date,
-                        doc.data().times
-                    );
-                }
-                if (parsedValue.name === doc.data().RoomName && storedUser.displayName === doc.data().name){
-                    const currentDate = new Date(doc.data().date * 1000);
-                    currentDate.setFullYear(currentDate.getFullYear() - 1969);
-                    currentDate.setDate(currentDate.getDate() + 1);
-
-                    let newDate = new Date(currentDate).toJSON();
-                    newDates.push(newDate);
-                }
-            });
-
-            setDataDates(newDates);
-            console.log(tree.head);
-            const sortedRoot = insertionSortLCRSTree(tree.head);
-            console.log('정렬된 트리: ', sortedRoot);
-
-            let newPossibleDates = [];
-            let currentNode = sortedRoot;
-            while (currentNode){
-                let newArray = Array(24).fill(0);
-                let siblingNode = currentNode;
-                while (siblingNode){
-                    siblingNode.times.forEach(value => {
-                        newArray[value]++;
-                    });
-                    siblingNode = siblingNode.sibling;
-                }
-                //const timeArray = Array(24).fill(0);  // 예제에서는 크기가 24인 배열을 가정
-                const indices = Array.from({ length: newArray.length }, (_, index) => index); // [0, 1, 2, ..., 23]
-
-                const {sortedArray, sortedIndices } = quickSort(newArray, indices);
-                //console.log(newArray);
-                //console.log(sortedIndices);
-                //console.log(sortedArray);
-                for (let i = 0; i < sortedIndices.length; i++) {
-                    if (sortedArray[i] !== 0){
-                        newPossibleDates.push(currentNode.date.split('T')[0] + "  " + sortedIndices[i] + "시");
-                    }
-                }
-                currentNode = currentNode.children;
-
-            }
-            console.log(newPossibleDates);
-            setPossibleDates(newPossibleDates);
-            //console.log(newPossibleDates);
-
-            /*let currentNode = sortedRoot;
-            let newPossibleDates = [];
-            while (currentNode) {
-                const date = currentNode.date.split('T')[0];
-                newPossibleDates.push(date);
-                currentNode = currentNode.children;
-            }
-            setPossibleDates(newPossibleDates);
-            console.log(newPossibleDates);*/
-            
-
-            const person1 = findVotersForDate(tree.head, date);
-                let node = person1;
-                let newParticipants = [];
-
-                while (node) {
-                    newParticipants.push(node.userName);
-                    node = node.sibling;
-                }
-
-                console.log("참여자 목록 :", newParticipants);
-                setParticipants(newParticipants);
-
-            };
-
-            fetchData();
-
-    localStorage.setItem('currentdate', JSON.stringify(date));
-}, [date]);
-    const handleShare = () => {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Link copied to clipboard!');
     };
-    
+
+    const location = useLocation();
+    const urlSearchParams = new URLSearchParams(location.search);
+
+    const storedRoom = JSON.parse(localStorage.getItem("currentRoom"));
+
+  
+    localStorage.setItem('currentdate', JSON.stringify(date));
+
+    const handleShare = async () => {
+        // 예를 들어, 버튼 클릭 이벤트를 기다릴 수 있도록 async 함수로 변경
+        // 또는 이 함수를 이벤트 핸들러 안에서 호출하도록 할 수 있습니다.
+        // 예를 들어: onClick={handleShare}
+        try {
+            var currentUrl = window.location.href;
+            var urlWithParams = currentUrl + '?roomName=' + storedRoom.name + '&startDate=' + storedRoom.startDate + '&endDate=' + storedRoom.endDate;
+            await navigator.clipboard.writeText(urlWithParams);
+            alert('Link copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy:', err);
+            alert('Failed to copy link!');
+        }
+    };
+
     const handleOpenPopup = () => {
         Window = window.open('Time', 'popup', 'width=500,height=500');
         if (selectedDate) {
@@ -334,9 +253,116 @@ function CalendarPage() {
     };
     const isDataDate = (date) => {
         // 데이터가 있는 일자인지 확인하는 함수
-        
+
         return dataDates.some((dataDate) => moment(dataDate).isSame(date, 'day'));
     };
+
+
+
+    // 로컬스토리지에 currentUser가 없으면 로그인 페이지로 이동
+    useEffect(() => {
+        if (!storedUser) {
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const roomName = urlSearchParams.get('roomName');
+            const startDate = urlSearchParams.get('startDate');
+            const endDate = urlSearchParams.get('endDate');
+            const url = `/login?roomName=${roomName}&startDate=${startDate}&endDate=${endDate}`;
+            navigate(url);
+        } else {
+            console.log(date);
+            const storedValue = localStorage.getItem('currentRoom');
+            const parsedValue = JSON.parse(storedValue);
+            if (parsedValue){
+                let fetchData = async () => {
+                    const newDates = [];
+                    const tree = new Tree();
+                    //console.log(tree.head);
+                    const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+                    //console.log('-- currentRoom.name: ', parsedValue.name);
+        
+                    querySnapshot.forEach((doc) => {
+                        if (parsedValue.name === doc.data().RoomName) {
+                            addNodeInRange(
+                                tree,
+                                doc.data().RoomName,
+                                doc.data().name,
+                                doc.data().email,
+                                doc.data().date,
+                                doc.data().times
+                            );
+                        }
+                        if (parsedValue.name === doc.data().RoomName && storedUser.displayName === doc.data().name) {
+                            const currentDate = new Date(doc.data().date * 1000);
+                            currentDate.setFullYear(currentDate.getFullYear() - 1969);
+                            currentDate.setDate(currentDate.getDate() + 1);
+        
+                            let newDate = new Date(currentDate).toJSON();
+                            newDates.push(newDate);
+                        }
+                    });
+        
+                    setDataDates(newDates);
+                    console.log(tree.head);
+                    const sortedRoot = insertionSortLCRSTree(tree.head);
+                    console.log('정렬된 트리: ', sortedRoot);
+        
+                    let newPossibleDates = [];
+                    let currentNode = sortedRoot;
+                    while (currentNode) {
+                        let newArray = Array(24).fill(0);
+                        let siblingNode = currentNode;
+                        while (siblingNode) {
+                            siblingNode.times.forEach(value => {
+                                newArray[value]++;
+                            });
+                            siblingNode = siblingNode.sibling;
+                        }
+                        //const timeArray = Array(24).fill(0);  // 예제에서는 크기가 24인 배열을 가정
+                        const indices = Array.from({ length: newArray.length }, (_, index) => index); // [0, 1, 2, ..., 23]
+        
+                        const { sortedArray, sortedIndices } = quickSort(newArray, indices);
+                        //console.log(newArray);
+                        //console.log(sortedIndices);
+                        //console.log(sortedArray);
+                        for (let i = 0; i < sortedIndices.length; i++) {
+                            if (sortedArray[i] !== 0) {
+                                newPossibleDates.push(currentNode.date.split('T')[0] + "  " + sortedIndices[i] + "시");
+                            }
+                        }
+                        currentNode = currentNode.children;
+        
+                    }
+                    console.log(newPossibleDates);
+                    setPossibleDates(newPossibleDates);
+        
+                    const person1 = findVotersForDate(tree.head, date);
+                    let node = person1;
+                    let newParticipants = [];
+        
+                    while (node) {
+                        newParticipants.push(node.userName);
+                        node = node.sibling;
+                    }
+        
+                    console.log("참여자 목록 :", newParticipants);
+                    setParticipants(newParticipants);
+        
+                };
+        
+                fetchData();           
+            } else {
+                const urlSearchParams = new URLSearchParams(window.location.search);
+                const roomName = urlSearchParams.get('roomName');
+                const startDate = urlSearchParams.get('startDate');
+                const endDate = urlSearchParams.get('endDate');
+                const url = `/login?roomName=${roomName}&startDate=${startDate}&endDate=${endDate}`;
+                navigate(url);
+            }
+            
+
+        }
+    }, [date])
+
     return (
         <>
             <Header />
