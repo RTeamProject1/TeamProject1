@@ -23,12 +23,16 @@ function Login() {
         const startDate = urlSearchParams.get('startDate');
         const endDate = urlSearchParams.get('endDate');
 
+        let currentRoom = JSON.parse(localStorage.getItem('currentRoom')) || [];
+
         if (roomName && startDate && endDate) {
-            const currentRoom = {
+            const newRoom = {
                 name: roomName,
                 startDate: startDate,
                 endDate: endDate,
             };
+
+            currentRoom.push(newRoom);
 
             localStorage.setItem('currentRoom', JSON.stringify(currentRoom));
         }
@@ -62,14 +66,18 @@ function Login() {
             const startDate = urlSearchParams.get('startDate');
             const endDate = urlSearchParams.get('endDate');
 
+            let currentRoom = JSON.parse(localStorage.getItem('currentRoom')) || [];
+
             // 방 정보가 있을 경우 로컬 스토리지에 저장
             if (roomName && startDate && endDate) {
-                const currentRoom = {
+                const newRoom = {
                     name: roomName,
                     startDate: startDate,
                     endDate: endDate,
                 };
-
+    
+                currentRoom.push(newRoom);
+    
                 localStorage.setItem('currentRoom', JSON.stringify(currentRoom));
             }
 

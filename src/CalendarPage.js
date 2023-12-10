@@ -225,8 +225,9 @@ function CalendarPage() {
     const location = useLocation();
     const urlSearchParams = new URLSearchParams(location.search);
 
-    const storedRoom = JSON.parse(localStorage.getItem("currentRoom"));
-
+    const storedRooms = JSON.parse(localStorage.getItem("currentRoom"));
+    // 우선 currentRoom의 첫번째 방 정보를 가져오게함 -> 수정해야함
+    const storedRoom = storedRooms[0];
   
     localStorage.setItem('currentdate', JSON.stringify(date));
 
@@ -261,107 +262,103 @@ function CalendarPage() {
 
     // 로컬스토리지에 currentUser가 없으면 로그인 페이지로 이동
     useEffect(() => {
-        if (!storedUser) {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-            const roomName = urlSearchParams.get('roomName');
-            const startDate = urlSearchParams.get('startDate');
-            const endDate = urlSearchParams.get('endDate');
-            const url = `/login?roomName=${roomName}&startDate=${startDate}&endDate=${endDate}`;
-            navigate(url);
-        } else {
-            console.log(date);
-            const storedValue = localStorage.getItem('currentRoom');
-            const parsedValue = JSON.parse(storedValue);
-            if (parsedValue){
-                let fetchData = async () => {
-                    const newDates = [];
-                    const tree = new Tree();
-                    //console.log(tree.head);
-                    const querySnapshot = await getDocs(collection(db, 'DateInfo'));
-                    //console.log('-- currentRoom.name: ', parsedValue.name);
-        
-                    querySnapshot.forEach((doc) => {
-                        if (parsedValue.name === doc.data().RoomName) {
-                            addNodeInRange(
-                                tree,
-                                doc.data().RoomName,
-                                doc.data().name,
-                                doc.data().email,
-                                doc.data().date,
-                                doc.data().times
-                            );
-                        }
-                        if (parsedValue.name === doc.data().RoomName && storedUser.displayName === doc.data().name) {
-                            const currentDate = new Date(doc.data().date * 1000);
-                            currentDate.setFullYear(currentDate.getFullYear() - 1969);
-                            currentDate.setDate(currentDate.getDate() + 1);
-        
-                            let newDate = new Date(currentDate).toJSON();
-                            newDates.push(newDate);
-                        }
-                    });
-        
-                    setDataDates(newDates);
-                    console.log(tree.head);
-                    const sortedRoot = insertionSortLCRSTree(tree.head);
-                    console.log('정렬된 트리: ', sortedRoot);
-        
-                    let newPossibleDates = [];
-                    let currentNode = sortedRoot;
-                    while (currentNode) {
-                        let newArray = Array(24).fill(0);
-                        let siblingNode = currentNode;
-                        while (siblingNode) {
-                            siblingNode.times.forEach(value => {
-                                newArray[value]++;
-                            });
-                            siblingNode = siblingNode.sibling;
-                        }
-                        //const timeArray = Array(24).fill(0);  // 예제에서는 크기가 24인 배열을 가정
-                        const indices = Array.from({ length: newArray.length }, (_, index) => index); // [0, 1, 2, ..., 23]
-        
-                        const { sortedArray, sortedIndices } = quickSort(newArray, indices);
-                        //console.log(newArray);
-                        //console.log(sortedIndices);
-                        //console.log(sortedArray);
-                        for (let i = 0; i < sortedIndices.length; i++) {
-                            if (sortedArray[i] !== 0) {
-                                newPossibleDates.push(currentNode.date.split('T')[0] + "  " + sortedIndices[i] + "시");
-                            }
-                        }
-                        currentNode = currentNode.children;
-        
-                    }
-                    console.log(newPossibleDates);
-                    setPossibleDates(newPossibleDates);
-        
-                    const person1 = findVotersForDate(tree.head, date);
-                    let node = person1;
-                    let newParticipants = [];
-        
-                    while (node) {
-                        newParticipants.push(node.userName);
-                        node = node.sibling;
-                    }
-        
-                    console.log("참여자 목록 :", newParticipants);
-                    setParticipants(newParticipants);
-        
-                };
-        
-                fetchData();           
-            } else {
+        const fetchData = async () => {
+            if (!storedUser) {
                 const urlSearchParams = new URLSearchParams(window.location.search);
                 const roomName = urlSearchParams.get('roomName');
                 const startDate = urlSearchParams.get('startDate');
                 const endDate = urlSearchParams.get('endDate');
                 const url = `/login?roomName=${roomName}&startDate=${startDate}&endDate=${endDate}`;
                 navigate(url);
-            }
-            
+            } else {
+                console.log(date);
+                const storedValue = localStorage.getItem('currentRoom');
+                const parsedValue = JSON.parse(storedValue);
+                if (Array.isArray(parsedValue)) {
+                    parsedValue.forEach(parsedValue)
+                    //let fetchData = async () => {
+                        const newDates = [];
+                        const tree = new Tree();
+                    //console.log(tree.head);
+                        const querySnapshot = await getDocs(collection(db, 'DateInfo'));
+                    //console.log('-- currentRoom.name: ', parsedValue.name);
 
-        }
-    }, [date])
+                        querySnapshot.forEach((doc) => {
+                            if (parsedValue.name === doc.data().RoomName) {
+                                addNodeInRange(
+                                    tree,
+                                    doc.data().RoomName,
+                                    doc.data().name,
+                                    doc.data().email,
+                                    doc.data().date,
+                                    doc.data().times
+                                );
+                            }
+                            if (parsedValue.name === doc.data().RoomName && storedUser.displayName === doc.data().name) {
+                                const currentDate = new Date(doc.data().date * 1000);
+                                currentDate.setFullYear(currentDate.getFullYear() - 1969);
+                                currentDate.setDate(currentDate.getDate() + 1);
+
+                                let newDate = new Date(currentDate).toJSON();
+                                newDates.push(newDate);
+                            }
+                        });
+
+                        setDataDates(newDates);
+                        console.log(tree.head);
+                        const sortedRoot = insertionSortLCRSTree(tree.head);
+                        console.log('정렬된 트리: ', sortedRoot);
+
+                        let newPossibleDates = [];
+                        let currentNode = sortedRoot;
+                        while (currentNode) {
+                            let newArray = Array(24).fill(0);
+                            let siblingNode = currentNode;
+                            while (siblingNode) {
+                                siblingNode.times.forEach(value => {
+                                    newArray[value]++;
+                                });
+                                siblingNode = siblingNode.sibling;
+                            }
+                        //const timeArray = Array(24).fill(0);  // 예제에서는 크기가 24인 배열을 가정
+                            const indices = Array.from({ length: newArray.length }, (_, index) => index); // [0, 1, 2, ..., 23]
+
+                            const { sortedArray, sortedIndices } = quickSort(newArray, indices);
+                        //console.log(newArray);
+                        //console.log(sortedIndices);
+                        //console.log(sortedArray);
+                            for (let i = 0; i < sortedIndices.length; i++) {
+                                if (sortedArray[i] !== 0) {
+                                    newPossibleDates.push(currentNode.date.split('T')[0] + "  " + sortedIndices[i] + "시");
+                                }
+                            }
+                            currentNode = currentNode.children;
+                        }
+                        console.log(newPossibleDates);
+                        setPossibleDates(newPossibleDates);
+
+                        const person1 = findVotersForDate(tree.head, date);
+                        let node = person1;
+                        let newParticipants = [];
+
+                        while (node) {
+                            newParticipants.push(node.userName);
+                            node = node.sibling;
+                        }
+
+                        console.log("참여자 목록 :", newParticipants);
+                        setParticipants(newParticipants);
+                } else {
+                    const urlSearchParams = new URLSearchParams(window.location.search);
+                    const roomName = urlSearchParams.get('roomName');
+                    const startDate = urlSearchParams.get('startDate');
+                    const endDate = urlSearchParams.get('endDate');
+                    const url = `/login?roomName=${roomName}&startDate=${startDate}&endDate=${endDate}`;
+                    navigate(url);
+                }
+            }
+            fetchData();
+    }}, [date]);
 
     return (
         <>
